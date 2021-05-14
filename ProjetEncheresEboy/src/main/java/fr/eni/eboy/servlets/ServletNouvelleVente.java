@@ -61,7 +61,7 @@ public class ServletNouvelleVente extends HttpServlet {
 				Article newarticle=manager.Ajouter(nomArticle, descritionArticle, dateDebutEnchere, dateFinEnchere1, prixInitial, 0, false, 1, nocategorie,pointRetrait);
 			} 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			 
 			e.printStackTrace();
 		}
 //		System.out.println(nomArticle+"------"+descritionArticle+"--------"+nocategorie);
