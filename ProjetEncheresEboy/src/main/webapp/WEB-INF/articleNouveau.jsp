@@ -30,7 +30,7 @@
 						</td> 
 						</tr>
 						<tr >
-						<td >Photo de l'article :</td>
+						<td >Photo de l'article : </td>
 						<td ><input type="file" accept="image/jpeg,image/png" ></td> 
 						</tr>
 						<tr >
