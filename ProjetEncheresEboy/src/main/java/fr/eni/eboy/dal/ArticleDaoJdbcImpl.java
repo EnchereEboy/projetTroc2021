@@ -64,7 +64,9 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 		} catch (SQLException e) { 
 			e.printStackTrace();
 		}
+		System.out.println("affichage de l'article ajouté");
 		System.out.println(articleAAjouter);
+		
 		return articleAAjouter;
 	}
 
