@@ -1,0 +1,29 @@
+#MaTable {
+ width: 60%;   
+ border-spacing: 1px; 
+ margin: auto;
+} 
+#MaTable1 {
+ width: 100%;   
+ border-spacing: 1px;  
+} 
+.fit-picture {
+    width: 150px;
+	padding-top:2%;
+	padding-left:2%; 
+	margin-bottom:100%;
+}
+.button{
+text-align:center;
+}
+ 
+ fieldset
+{ 
+  max-width:500px;
+  padding:1px;	
+}
+.legend1
+{
+  margin-bottom:0px;
+  margin-left:1px;
+}
