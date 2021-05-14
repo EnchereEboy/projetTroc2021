@@ -57,7 +57,7 @@ public class ServletNouvelleVente extends HttpServlet {
 				Retrait pointRetrait=new Retrait(adresse,codePostal,Ville);
 				Article newarticle=manager.Ajouter(nomArticle, descritionArticle, dateDebutEnchere, dateFinEnchere1, prixInitial, 0, false, 1, nocategorie,pointRetrait);
 			}else {
-				Retrait pointRetrait=new Retrait();
+				Retrait pointRetrait=new Retrait(adresse,codePostal,Ville);
 				Article newarticle=manager.Ajouter(nomArticle, descritionArticle, dateDebutEnchere, dateFinEnchere1, prixInitial, 0, false, 1, nocategorie,pointRetrait);
 			} 
 		} catch (Exception e) {
