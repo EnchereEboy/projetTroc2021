@@ -16,7 +16,6 @@ import fr.eni.eboy.bll.UtilisateurManager;
 import fr.eni.eboy.bo.Article;
 import fr.eni.eboy.bo.Retrait;
 import fr.eni.eboy.bo.Utilisateur;
-
 /**
  * Servlet implementation class NouvelleVente
  */
