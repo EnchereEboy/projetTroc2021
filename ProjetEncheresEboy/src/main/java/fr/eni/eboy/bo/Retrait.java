@@ -11,6 +11,10 @@ import java.io.Serializable;
  */
 
 public class Retrait implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer no_article;
 	private String rue;// 30 Caratctères maximum
 	private String code_postale;// 15 Caratctères maximum

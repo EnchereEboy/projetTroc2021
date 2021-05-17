@@ -30,6 +30,7 @@ public class Article implements Serializable{
 	private Retrait lieuRetrait;	
 	
 	public Article() { 	
+		lieuRetrait=new Retrait();
 	}
 	
 	

@@ -12,6 +12,10 @@ import java.time.LocalDateTime;
  */
 
 public class Enchere implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer no_enchere;
 	private LocalDateTime date_enchere;
 	private Integer montant_enchere;

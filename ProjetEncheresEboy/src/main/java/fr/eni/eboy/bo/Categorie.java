@@ -11,6 +11,10 @@ import java.io.Serializable;
  */
 
 public class Categorie implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer no_categorie;
 	private String libelle; //30 caractères maximum
 	public Integer getNo_categorie() {

@@ -44,23 +44,45 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 	@Override
 	public Article ajouter(Article articleAAjouter) { 
 		try(Connection cnx=ConnectionProvider.getConnection()){
-			PreparedStatement pStmt= cnx.prepareStatement(REQ_INSERT, Statement.RETURN_GENERATED_KEYS);
-			  pStmt.setString(1, articleAAjouter.getNom_article());
-			  pStmt.setString(2, articleAAjouter.getDescription());
-			  pStmt.setString(3, articleAAjouter.getDate_debut_encheres().format(formatJourMoisAnneeHeureMinute)) ;
-			  pStmt.setString(4, articleAAjouter.getDate_fin_encheres().format(formatJourMoisAnneeHeureMinute)) ; 
-			  pStmt.setInt(5,articleAAjouter.getPrix_initial());
-			  pStmt.setInt(6, articleAAjouter.getPrix_vente());   
-			  pStmt.setInt(7,articleAAjouter.getNo_utilisateur());
-			  pStmt.setInt(8, articleAAjouter.getNo_categorie());
-//			int nbreLigneInseree= pStmt.executeUpdate();
-			 pStmt.executeUpdate();
-			ResultSet rs=pStmt.getGeneratedKeys();
-			if(rs.next()) {
-				articleAAjouter.setNo_article(rs.getInt(1));
-			}
-			
-			
+			  cnx.setAutoCommit(false);
+	     if(articleAAjouter !=null) {
+	    	 try {    
+	    		     PreparedStatement pStmt= cnx.prepareStatement(REQ_INSERT, Statement.RETURN_GENERATED_KEYS);
+					  pStmt.setString(1, articleAAjouter.getNom_article());
+					  pStmt.setString(2, articleAAjouter.getDescription());
+					  pStmt.setString(3, articleAAjouter.getDate_debut_encheres().format(formatJourMoisAnneeHeureMinute)) ;
+					  pStmt.setString(4, articleAAjouter.getDate_fin_encheres().format(formatJourMoisAnneeHeureMinute)) ; 
+					  pStmt.setInt(5,articleAAjouter.getPrix_initial());
+					  pStmt.setInt(6, articleAAjouter.getPrix_vente());   
+					  pStmt.setInt(7,articleAAjouter.getNo_utilisateur());
+					  pStmt.setInt(8, articleAAjouter.getNo_categorie());
+		//			  int nbreLigneInseree= pStmt.executeUpdate();
+					   pStmt.executeUpdate();
+					   ResultSet rs=pStmt.getGeneratedKeys();
+					   if(rs.next()) {
+							articleAAjouter.setNo_article(rs.getInt(1));
+					   }
+					   //System.err.println(articleAAjouter.getLieuRetrait().getRue());
+					   //System.err.println(articleAAjouter.getLieuRetrait());
+					   
+					 if(articleAAjouter.getLieuRetrait().getRue()!=null) {
+						 System.out.println("ajout de l'adresse");
+						 PreparedStatement pStmtRetrait=cnx.prepareStatement(REQ_INSERT_RETRAIT);
+						 pStmtRetrait.setInt(1, articleAAjouter.getNo_article());
+						 pStmtRetrait.setString(2, articleAAjouter.getLieuRetrait().getRue());
+						 pStmtRetrait.setString(3, articleAAjouter.getLieuRetrait().getCode_postale());
+						 pStmtRetrait.setString(4, articleAAjouter.getLieuRetrait().getVille());
+						 pStmtRetrait.executeUpdate() ;			
+						 }else {
+							 System.out.println("Adresse non ajouter");
+                          }
+					   
+				cnx.commit();
+		     }catch (SQLException e) {
+		    	 cnx.rollback();
+		    	 e.printStackTrace();
+			 }
+		 } 	
 		} catch (SQLException e) { 
 			e.printStackTrace();
 		}

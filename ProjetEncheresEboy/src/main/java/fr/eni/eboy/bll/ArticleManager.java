@@ -24,7 +24,7 @@ public class ArticleManager {
 		   LocalDateTime dateFinEnchere,Integer prixInitial,Integer prixVente, boolean etatvente,
 		   Integer noUtilisateur, Integer noCategorie, Retrait ptRetrait) throws Exception {
 	   Article nouveauArticle=new Article( nomArticle,  description, dateDebutEnchere,
-			   dateFinEnchere, prixInitial,  prixVente, false, noUtilisateur,  noCategorie); 
+			   dateFinEnchere, prixInitial,  prixVente, false, noUtilisateur,  noCategorie,ptRetrait); 
 	  return  DaoFactory.getArticleDao().ajouter(nouveauArticle);
 	    
    }

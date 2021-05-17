@@ -4,7 +4,7 @@
 <link href="css/style.css" rel="stylesheet" media="all">
 </head>
 <body>
-   <form  action="<%=request.getContextPath() %>/NouvelleVente"  method="POST">
+   <form  action="<%=request.getContextPath() %>/NouvelleVente"  method="POST"   >
                  <table     id="MaTable" class="tabcenter">
 						<tbody>  
 						<caption> Nouvelle vente <c:out value="Bonjour !" /> </caption>
@@ -14,7 +14,7 @@
 						<td ><input type ="text" name="article" id="article" placeholder="Nom de l'article." required></td>
 						</tr>
 						<tr  >
-						<td >Description :</td>
+						<td >Description </td>
 						<td  ><textarea name="description" minlength="10" maxlength="250" placeholder="Description de l'article." rows="5" cols="30" required></textarea></td> 
 						</tr>
 						<tr >
@@ -65,15 +65,15 @@
 						        <table   id="MaTable1" >
 										<tr >
 											<td width="50%"><label>Rue</label></td>
-											<td width="50%"><input type="text" name="adresse" placeholder="Votre adresse"/> </td>
+											<td width="50%"><input type="text" name="adresse" value="${user.rue}" placeholder="Votre adresse"/> </td>
 										</tr>
 										<tr>
 											<td><label>Code postal</label></td>
-											<td><input type="text" name="codepoastal" placeholder="Votre code postal"/></td>
+											<td><input type="text" name="codepoastal" value="${user.codePostal}" placeholder="Votre code postal"/></td>
 										</tr>
 										<tr>
 											<td><label>Ville</label></td>
-											<td><input type="text" name="ville" placeholder="Votre Ville"/></td>
+											<td><input type="text" name="ville" value="${user.ville}" placeholder="Votre Ville"/></td>
 										</tr>
 								</table>
 						</fieldset>
