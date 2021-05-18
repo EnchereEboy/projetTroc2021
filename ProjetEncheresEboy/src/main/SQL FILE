@@ -127,6 +127,39 @@ INSERT INTO UTILISATEURS (pseudo
 ('yankee' ,'sidy', 'barry', 'b@eni.fr', '0701020304', 'colonel', 35500, 'Rennes Sud', 'mdp', 100, 0);
 
 
+
+INSERT INTO UTILISATEURS (pseudo
+, nom
+, prenom
+, email
+, telephone
+, rue
+, code_postal
+, ville
+, mot_de_passe
+, credit
+, administrateur) VALUES
+('koukou' ,'stasia', 'boussoukou', 'c@eni.fr', '0801020304', 'manoir', 35400, 'Rennes EST', 'mdp', 100, 0);
+
+
+
+INSERT INTO UTILISATEURS (pseudo
+, nom
+, prenom
+, email
+, telephone
+, rue
+, code_postal
+, ville
+, mot_de_passe
+, credit
+, administrateur) VALUES
+('dave' ,'david', 'phelep', 'd@eni.fr', '0901020304', 'schtroumpf', 35300, 'Rennes West', 'mdp', 100, 0);
+
+
+
+
+
 INSERT INTO CATEGORIES (libelle
 ) VALUES
 ('INFORMATIQUE');
@@ -135,6 +168,13 @@ INSERT INTO CATEGORIES (libelle
 ) VALUES
 ('AMEUBLEMENT');
 
+INSERT INTO CATEGORIES (libelle
+) VALUES
+('VÊTEMENT');
+
+INSERT INTO CATEGORIES (libelle
+) VALUES
+('SPORT&LOISIRS');
 
 INSERT INTO ARTICLES_VENDUS (nom_article
 , description
@@ -161,6 +201,31 @@ INSERT INTO ARTICLES_VENDUS (nom_article
 ('pistolet laser' ,'un gros pistolet laser', '30-03-2021 19:16' , '10-04-2021 12:00', 1000, 1200, 2, 1, 1);
 
 
+INSERT INTO ARTICLES_VENDUS (nom_article
+, description
+, date_debut_encheres
+, date_fin_encheres
+,prix_initial
+,prix_vente
+,no_utilisateur
+,no_categorie
+,etat_vente) VALUES
+('doudoune' ,'une doudoune chaude', '30-03-2021 19:16' , '01-04-2021 12:00', 100, 3000, 3, 3, 1);
+
+
+
+INSERT INTO ARTICLES_VENDUS (nom_article
+, description
+, date_debut_encheres
+, date_fin_encheres
+,prix_initial
+,prix_vente
+,no_utilisateur
+,no_categorie
+,etat_vente) VALUES
+('moto' ,'une grosse moto', '01-04-2021 20:16' , '10-06-2021 12:10', 10000, 30000, 4, 4, 0);
+
+
 INSERT INTO RETRAITS (no_article
 , rue
 , code_postal
@@ -168,13 +233,61 @@ INSERT INTO RETRAITS (no_article
 (2, 'colonel', '35500', 'Rennes Sud')
 
 
+INSERT INTO RETRAITS (no_article
+, rue
+, code_postal
+, ville) VALUES
+(4, 'ENI', '35500', 'Rennes West')
+---------------------------------------
+
 INSERT INTO ENCHERES (date_enchere
 , montant_enchere
 , no_article
 , no_utilisateur) VALUES
 ('01-04-2021 10:10:10', 1200, 2, 1)
+--------------------------------------------
 
 
+INSERT INTO ENCHERES (date_enchere
+, montant_enchere
+, no_article
+, no_utilisateur) VALUES
+('30-03-2021 19:16:01', 120, 3, 1)
+
+
+INSERT INTO ENCHERES (date_enchere
+, montant_enchere
+, no_article
+, no_utilisateur) VALUES
+('30-03-2021 19:16:11', 200, 3, 2)
+
+
+INSERT INTO ENCHERES (date_enchere
+, montant_enchere
+, no_article
+, no_utilisateur) VALUES
+('30-03-2021 19:16:11.50', 250, 3, 4)
+
+
+INSERT INTO ENCHERES (date_enchere
+, montant_enchere
+, no_article
+, no_utilisateur) VALUES
+('30-03-2021 20:16:11', 3000, 3, 2)
+-------------------------------------------
+
+INSERT INTO ENCHERES (date_enchere
+, montant_enchere
+, no_article
+, no_utilisateur) VALUES
+('01-04-2021 20:20:01', 1200, 2, 1)
+
+
+INSERT INTO ENCHERES (date_enchere
+, montant_enchere
+, no_article
+, no_utilisateur) VALUES
+('01-04-2021 21:55:06', 1200, 2, 1)
 
 
 

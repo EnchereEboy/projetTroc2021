@@ -112,6 +112,12 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 			+ NUM_CAT_COL + "=? "
 			+ "AND " + NUM_UTIL_COL +"=? "
 			+ "AND LOWER("+ NOM_COL +") LIKE  ?";
+	private static final String REQ_SELECT_BY_CAT_AND_NAME_EN_COURS = "SELECT * "
+			+ "FROM ARTICLES_VENDUS "
+			+ "WHERE "
+			+ NUM_CAT_COL + "=? "
+			+ "AND " + ETAT_VENTE_COL +"=0 "
+			+ "AND LOWER("+ NOM_COL +") LIKE  ?";
 	
 //	private static final String REQ_SELECTBYID="select nom_article,description,date_debut_encheres,"
 //			+ "date_fin_encheres,prix_initial,prix_vente,no_utilisateur,no_categorie,etat_vente\r\n"
@@ -243,6 +249,25 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 		return reussiteUpdate;
 	}
 
+	
+	@Override
+	public List<Article> selectByCategorieAndNameEnCours(Categorie cat, String recherche) {
+
+		List<Article> listeArticlesARetourner = new ArrayList<Article>();
+		try (Connection cnx =ConnectionProvider.getConnection()){
+			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_EN_COURS);
+			pStmt.setInt(1, cat.getNumero());
+			pStmt.setString(2, "%" + recherche.toLowerCase().trim() + "%");
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()) {
+				listeArticlesARetourner.add(map(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listeArticlesARetourner;
+	}
+	
 	@Override
 	public List<Article> selectByCategorieAndNameAndUtilisateur(Categorie cat, String recherche, Integer idUtilisateur) {
 
@@ -251,7 +276,7 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_AND_USER);
 			pStmt.setInt(1, cat.getNumero());
 			pStmt.setInt(2, idUtilisateur);
-			pStmt.setString(3, "%" + recherche + "%");
+			pStmt.setString(3, "%" + recherche.toLowerCase().trim() + "%");
 			ResultSet rs = pStmt.executeQuery();
 			while(rs.next()) {
 				listeArticlesARetourner.add(map(rs));
@@ -267,12 +292,6 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 	@Override
 	public List<Article> selectByCategorieAndNameAndUtilisateurGagnee(Categorie cat, String recherche,
 			Integer idUtilisateur) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Article> selectByCategorieAndNameEnCours(Categorie cat, String recherche) {
 		// TODO Auto-generated method stub
 		return null;
 	}

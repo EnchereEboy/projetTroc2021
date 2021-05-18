@@ -10,8 +10,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.eni.eboy.bo.Article;
+import fr.eni.eboy.bo.Categorie;
 import fr.eni.eboy.bo.Enchere;
 import fr.eni.eboy.bo.Utilisateur;
 
@@ -47,6 +50,13 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	private static final String MONTANT_COL = "montant_enchere";
 	private static final String NUM_ARTICLE_COL = "no_article";
 	private static final String NUM_UTILISATEUR_COL = "no_utilisateur";
+	private static final String ETAT_VENTE_COL = "etat_vente";
+	private static final String REQ_SELECT_BY_CAT_AND_NAME_AND_ACHETEUR = "SELECT * "
+			+ "FROM ARTICLES_VENDUS "
+			+ "WHERE "
+			+ NUM_COL + "=? "
+			+ "AND " + ETAT_VENTE_COL +"=0 "
+			+ "AND LOWER("+ NOM_COL +") LIKE  ?";
 	
 	
 	
@@ -74,38 +84,34 @@ e.printStackTrace();
 		return newEnchere;
 	}
 
+
 	/**
 	* {@inheritDoc}
 	*/
 	@Override
-	public boolean deleteById(int id) {
-		// TODO Auto-generated method stub
-		return false;
+	public List<Enchere> selectByUtilisateurAcheteurByCatByName(Categorie cat, Utilisateur utilisateur, String recherche) {
+
+		List<Enchere> listeEnchereUtilisateur = new ArrayList<Enchere>();
+		try (Connection cnx =ConnectionProvider.getConnection()){
+			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_AND_ACHETEUR);
+			pStmt.setInt(1, cat.getNumero());
+			pStmt.setInt(2, utilisateur.getNumero());
+			pStmt.setString(3, "%" + recherche.toLowerCase().trim() + "%");
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()) {
+				listeEnchereUtilisateur.add(map(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listeEnchereUtilisateur;
 	}
 
 	/**
 	* {@inheritDoc}
 	*/
 	@Override
-	public Enchere selectById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	* {@inheritDoc}
-	*/
-	@Override
-	public Enchere selectByUtilisateurAcheteur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	* {@inheritDoc}
-	*/
-	@Override
-	public Enchere selectByUtilisateurGagne(Utilisateur utilisateur) {
+	public List<Enchere> selectByUtilisateurGagne(Utilisateur utilisateur) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -161,5 +167,35 @@ e.printStackTrace();
 		enchereRetour.setUtilisateur(DaoFactory.getUtilisateurDao().selectById(rs.getInt(NUM_UTILISATEUR_COL)));
 		return enchereRetour;
 	}
+
+	/**
+	* {@inheritDoc}
+	*/
+	@Override
+	public boolean deleteById(Integer idEnchere) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	* {@inheritDoc}
+	*/
+	@Override
+	public Enchere selectById(Integer idEnchere) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	* {@inheritDoc}
+	*/
+	@Override
+	public List<Enchere> selectByUtilisateurAcheteur(Utilisateur utilisateur, String rechereche) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
 
 }

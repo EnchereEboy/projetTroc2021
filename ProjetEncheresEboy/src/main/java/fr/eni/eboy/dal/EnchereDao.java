@@ -3,7 +3,10 @@
  */
 package fr.eni.eboy.dal;
 
+import java.util.List;
+
 import fr.eni.eboy.bo.Article;
+import fr.eni.eboy.bo.Categorie;
 import fr.eni.eboy.bo.Enchere;
 import fr.eni.eboy.bo.Utilisateur;
 
@@ -18,15 +21,19 @@ public interface EnchereDao {
 	// Début des create update delete
 	public Enchere insertNewEnchere(Enchere newEnchere);
 
-	public boolean deleteById (int id);
+	public boolean deleteById (Integer idEnchere);
 	
 	//Debut des Select
-	public Enchere selectById(int id);
+	public Enchere selectById(Integer idEnchere);
 	
-	public Enchere selectByUtilisateurAcheteur(Utilisateur utilisateur);
+	public List<Enchere> selectByUtilisateurAcheteur(Utilisateur utilisateur, String recherche);
 	
-	public Enchere selectByUtilisateurGagne(Utilisateur utilisateur);
+	public List<Enchere> selectByUtilisateurAcheteurByCatByName(Categorie cat, Utilisateur utilisateur, String recherche);
+	
+	
+	public List<Enchere> selectByUtilisateurGagne(Utilisateur utilisateur);
 
 	public Enchere selectByArticleMeilleurOffre (Article article);
+
 
 }
