@@ -1,168 +1,270 @@
-/**
- * 
- */
 package fr.eni.eboy.bo;
+
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @author SIDY
+ * 
+ * Classe représentant un article
+ * 
+ * @author sboussoukou2021
  *
  */
-
 public class Article implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer no_article;
-	private String nom_article;//String de 30 maximum
+	private Integer numero;
+	private String nom;//String de 30 maximum
 	private String description;//String de 300 maximum
-	private LocalDateTime date_debut_encheres;// supérieur à la date du jour
-	private LocalDateTime date_fin_encheres;// superieur à la date du d颵but des ench貥s
-	private Integer prix_initial;
-	private Integer prix_vente;
-	private boolean etat_vente;
-	private Integer no_utilisateur;
-	private Integer no_categorie;
+	private LocalDateTime dateDebutEncheres;// supérieur à la date du jour
+	private LocalDateTime dateFinEncheres;// superieur à la date du début des enchères
+	private Integer prixInitial;
+	private Integer prixVente;
+	private boolean etatVente;
+	private Utilisateur utilisateur;
+	private Categorie categorie;
 	
-	private Retrait lieuRetrait;	
+	private Retrait lieuRetrait;
 	
-	public Article() { 	
-		lieuRetrait=new Retrait();
-	}
-	
-	
-	public Article(String nom_article, String description, LocalDateTime date_debut_encheres,
-			LocalDateTime date_fin_encheres, Integer prix_initial, Integer prix_vente, boolean etat_vente,
-			Integer no_utilisateur, Integer no_categorie, Retrait lieuRetrait) {
-		 
-		this.nom_article = nom_article;
-		this.description = description;
-		this.date_debut_encheres = date_debut_encheres;
-		this.date_fin_encheres = date_fin_encheres;
-		this.prix_initial = prix_initial;
-		this.prix_vente = prix_vente;
-		this.etat_vente = etat_vente;
-		this.no_utilisateur = no_utilisateur;
-		this.no_categorie = no_categorie;
-		this.lieuRetrait = lieuRetrait;
-	} 
 
-
-	public Article(Integer no_article, String nom_article, String description, LocalDateTime date_debut_encheres,
-			LocalDateTime date_fin_encheres, Integer prix_initial, Integer prix_vente, boolean etat_vente,
-			Integer no_utilisateur, Integer no_categorie, Retrait lieuRetrait) {
-	 
-		this.no_article = no_article;
-		this.nom_article = nom_article;
-		this.description = description;
-		this.date_debut_encheres = date_debut_encheres;
-		this.date_fin_encheres = date_fin_encheres;
-		this.prix_initial = prix_initial;
-		this.prix_vente = prix_vente;
-		this.etat_vente = etat_vente;
-		this.no_utilisateur = no_utilisateur;
-		this.no_categorie = no_categorie;
-		this.lieuRetrait = lieuRetrait;
-	}
-
-	public Article(String nom_article, String description, LocalDateTime date_debut_encheres,
-			LocalDateTime date_fin_encheres, Integer prix_initial, Integer prix_vente, boolean etat_vente,
-			Integer no_utilisateur, Integer no_categorie ) { 
-		this.nom_article = nom_article;
-		this.description = description;
-		this.date_debut_encheres = date_debut_encheres;
-		this.date_fin_encheres = date_fin_encheres;
-		this.prix_initial = prix_initial;
-		this.prix_vente = prix_vente;
-		this.etat_vente = etat_vente;
-		this.no_utilisateur = no_utilisateur;
-		this.no_categorie = no_categorie; 
+	private List<Enchere> listeEncheres = new ArrayList<>();
+	
+	
+	public Article() {
+		
 	}
 
 
-	public Integer getNo_article() {
-		return no_article;
+	public Article(Integer numero, String nom, String description, LocalDateTime dateDebutEncheres,
+			LocalDateTime dateFinEncheres, Integer prixInitial, Integer prixVente, boolean etatVente,
+			Utilisateur utilisateur, Categorie categorie, List<Enchere> listeEncheres) {
+		this();
+		setNumero(numero);
+		setNom(nom);
+		setDescription(description);
+		setDateDebutEncheres(dateDebutEncheres);
+		setDateFinEncheres(dateFinEncheres);
+		setPrixInitial(prixInitial);
+		setPrixVente(prixVente);
+		setEtatVente(etatVente);
+		setUtilisateur(utilisateur);
+		setCategorie(categorie);
+		setListeEncheres(listeEncheres);
 	}
-	public void setNo_article(Integer no_article) {
-		this.no_article = no_article;
+
+	public Article(Integer numero, String nom, String description, LocalDateTime dateDebutEncheres,
+			LocalDateTime dateFinEncheres, Integer prixInitial, Integer prixVente, boolean etatVente,
+			Utilisateur utilisateur, Categorie categorie) {
+		this();
+		setNumero(numero);
+		setNom(nom);
+		setDescription(description);
+		setDateDebutEncheres(dateDebutEncheres);
+		setDateFinEncheres(dateFinEncheres);
+		setPrixInitial(prixInitial);
+		setPrixVente(prixVente);
+		setEtatVente(etatVente);
+		setUtilisateur(utilisateur);
+		setCategorie(categorie);
 	}
-	public String getNom_article() {
-		return nom_article;
+
+
+	public Article(Integer numero, String nom, String description, LocalDateTime dateDebutEncheres,
+			LocalDateTime dateFinEncheres, Integer prixInitial, Integer prixVente, boolean etatVente,
+			Utilisateur utilisateur, Categorie categorie, Retrait lieuRetrait) {
+		this();
+		setNumero(numero);
+		setNom(nom);
+		setDescription(description);
+		setDateDebutEncheres(dateDebutEncheres);
+		setDateFinEncheres(dateFinEncheres);
+		setPrixInitial(prixInitial);
+		setPrixVente(prixVente);
+		setEtatVente(etatVente);
+		setUtilisateur(utilisateur);
+		setCategorie(categorie);
+		setLieuRetrait(lieuRetrait);
 	}
+
 	
-	
-	public void setNom_article(String nom_article) {
-		this.nom_article = nom_article;
+	/**
+	 * Constructeur d'un nouvel article en BDD.
+	 * @param nom
+	 * @param description
+	 * @param dateDebutEncheres
+	 * @param dateFinEncheres
+	 * @param prixInitial
+	 * @param prixVente
+	 * @param etatVente
+	 * @param utilisateur
+	 * @param categorie
+	 * @param lieuRetrait
+	 */
+	public Article(String nom, String description, LocalDateTime dateDebutEncheres, LocalDateTime dateFinEncheres,
+			Integer prixInitial, Integer prixVente, boolean etatVente, Utilisateur utilisateur, Categorie categorie,
+			Retrait lieuRetrait) {
+		this();
+		setNom(nom);
+		setDescription(description);
+		setDateDebutEncheres(dateDebutEncheres);
+		setDateFinEncheres(dateFinEncheres);
+		setPrixInitial(prixInitial);
+		setPrixVente(prixVente);
+		setEtatVente(etatVente);
+		setUtilisateur(utilisateur);
+		setCategorie(categorie);
+		setLieuRetrait(lieuRetrait);	
+		}
+
+
+	public Integer getNumero() {
+		return numero;
 	}
+
+
+	public void setNumero(Integer numero) {
+		this.numero = numero;
+	}
+
+
+	public String getNom() {
+		return nom;
+	}
+
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+
 	public String getDescription() {
 		return description;
 	}
+
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public LocalDateTime getDate_debut_encheres() {
-		return date_debut_encheres;
+
+
+	public LocalDateTime getDateDebutEncheres() {
+		return dateDebutEncheres;
 	}
-	public void setDate_debut_encheres(LocalDateTime date_debut_encheres) {
-		this.date_debut_encheres = date_debut_encheres;
+
+
+	public void setDateDebutEncheres(LocalDateTime dateDebutEncheres) {
+		this.dateDebutEncheres = dateDebutEncheres;
 	}
-	public LocalDateTime getDate_fin_encheres() {
-		return date_fin_encheres;
+
+
+	public LocalDateTime getDateFinEncheres() {
+		return dateFinEncheres;
 	}
-	public void setDate_fin_encheres(LocalDateTime date_fin_encheres) {
-		this.date_fin_encheres = date_fin_encheres;
+
+
+	public void setDateFinEncheres(LocalDateTime dateFinEncheres) {
+		this.dateFinEncheres = dateFinEncheres;
 	}
-	public Integer getPrix_initial() {
-		return prix_initial;
+
+
+	public Integer getPrixInitial() {
+		return prixInitial;
 	}
-	public void setPrix_initial(Integer prix_initial) {
-		this.prix_initial = prix_initial;
+
+
+	public void setPrixInitial(Integer prixInitial) {
+		this.prixInitial = prixInitial;
 	}
-	public Integer getPrix_vente() {
-		return prix_vente;
+
+
+	public Integer getPrixVente() {
+		return prixVente;
 	}
-	public void setPrix_vente(Integer prix_vente) {
-		this.prix_vente = prix_vente;
+
+
+	public void setPrixVente(Integer prixVente) {
+		this.prixVente = prixVente;
 	}
-	public boolean isEtat_vente() {
-		return etat_vente;
+
+
+	public boolean isEtatVente() {
+		return etatVente;
 	}
-	public void setEtat_vente(boolean etat_vente) {
-		this.etat_vente = etat_vente;
+
+
+	public void setEtatVente(boolean etatVente) {
+		this.etatVente = etatVente;
 	}
-	public Integer getNo_utilisateur() {
-		return no_utilisateur;
+
+
+	public Utilisateur getUtilisateur() {
+		return utilisateur;
 	}
-	public void setNo_utilisateur(Integer no_utilisateur) {
-		this.no_utilisateur = no_utilisateur;
+
+
+	public void setUtilisateur(Utilisateur utilisateur) {
+		this.utilisateur = utilisateur;
 	}
-	public Integer getNo_categorie() {
-		return no_categorie;
+
+
+	public Categorie getCategorie() {
+		return categorie;
 	}
-	public void setNo_categorie(Integer no_categorie) {
-		this.no_categorie = no_categorie;
+
+
+	public void setCategorie(Categorie categorie) {
+		this.categorie = categorie;
 	}
+
+
+	/**
+	 * Getter pour lieuRetrait.
+	 * @return the lieuRetrait
+	 */
 	public Retrait getLieuRetrait() {
 		return lieuRetrait;
 	}
+
+
+	/**
+	 * Setter pour lieuRetrait.
+	 * @param lieuRetrait the lieuRetrait to set
+	 */
 	public void setLieuRetrait(Retrait lieuRetrait) {
 		this.lieuRetrait = lieuRetrait;
-	} 
-	
-	
-	 
-	
-	
+	}
+
+	public List<Enchere> getListeEncheres() {
+		return listeEncheres;
+	}
+
+
+	public void setListeEncheres(List<Enchere> listeEncheres) {
+		this.listeEncheres = listeEncheres;
+	}
+
+
 	@Override
 	public String toString() {
-		return "Article [no_article=" + no_article + ", nom_article=" + nom_article + ", description=" + description
-				+ ", date_debut_encheres=" + date_debut_encheres + ", date_fin_encheres=" + date_fin_encheres
-				+ ", prix_initial=" + prix_initial + ", prix_vente=" + prix_vente + ", etat_vente=" + etat_vente
-				+ ", no_utilisateur=" + no_utilisateur + ", no_categorie=" + no_categorie + "]";
+		return "Article [numero=" + numero + ", nom=" + nom + ", description=" + description + ", dateDebutEncheres="
+				+ dateDebutEncheres + ", dateFinEncheres=" + dateFinEncheres + ", prixInitial=" + prixInitial
+				+ ", prixVente=" + prixVente + ", etatVente=" + etatVente + ", utilisateur=" + utilisateur
+				+ ", categorie=" + categorie + ", listeEncheres=" + listeEncheres + "]";
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 }

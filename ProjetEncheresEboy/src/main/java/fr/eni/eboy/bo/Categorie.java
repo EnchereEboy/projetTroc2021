@@ -4,46 +4,64 @@
 package fr.eni.eboy.bo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @author SIDY
+ * Classe représentant l'objet catégorie
+ * @author sboussoukou2021
  *
  */
-
 public class Categorie implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer no_categorie;
+	private Integer numero;
 	private String libelle; //30 caractères maximum
-	public Integer getNo_categorie() {
-		return no_categorie;
-	}
-	public void setNo_categorie(Integer no_categorie) {
-		this.no_categorie = no_categorie;
-	}
-	public String getLibelle() {
-		return libelle;
-	}
-	public void setLibelle(String libelle) {
-		this.libelle = libelle;
-	}
-	@Override
-	public String toString() {
-		return "Categorie [no_categorie=" + no_categorie + ", libelle=" + libelle + "]";
-	}
+	
+	private List<Article> listeArticles = new ArrayList<Article>();
+	
+	
 	public Categorie() {
 		
 	}
-	
-	public Categorie(Integer no_categorie, String libelle) {
+
+	public Categorie(Integer numero, String libelle, List<Article> listeArticles) {
 		this();
-		setNo_categorie(no_categorie);
+		setNumero(numero);
 		setLibelle(libelle);
+		setListeArticles(listeArticles);
 	}
 
-	
-	
-	
+
+
+	public Integer getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Integer numero) {
+		this.numero = numero;
+	}
+
+	public String getLibelle() {
+		return libelle;
+	}
+
+	public void setLibelle(String libelle) {
+		this.libelle = libelle;
+	}
+
+	public List<Article> getListeArticles() {
+		return listeArticles;
+	}
+
+	public void setListeArticles(List<Article> listeArticles) {
+		this.listeArticles = listeArticles;
+	}
+
+	@Override
+	public String toString() {
+		return "Categorie [numero=" + numero + ", libelle=" + libelle + ", listeArticles=" + listeArticles + "]";
+	}
 }
