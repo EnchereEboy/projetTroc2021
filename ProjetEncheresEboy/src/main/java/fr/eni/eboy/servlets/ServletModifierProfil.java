@@ -19,26 +19,46 @@ import fr.eni.eboy.bo.Utilisateur;
 @WebServlet("/modifierProfil")
 public class ServletModifierProfil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private UtilisateurManager modifUtilisateur = new UtilisateurManager();
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/modifierProfil.jsp");
-		rd.forward(request, response);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		if (request.getParameter("id") == null) {
+			RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/modifierProfil.jsp");
+			rd.forward(request, response);
+		} else {
+			Integer idUser = Integer.parseInt(request.getParameter("id"));
+			Utilisateur utilisateur = new Utilisateur();
+
+			try {
+				utilisateur = modifUtilisateur.retournerUtilisateurParId(idUser);
+				request.setAttribute("userUpdate", utilisateur);
+				RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/modifierProfil.jsp");
+				rd.forward(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");	
-		RequestDispatcher rd =null;		
-		UtilisateurManager utilisateurManager = new UtilisateurManager();
-		Utilisateur utilisateur = null;
 		HttpSession session = request.getSession();
-
-		String identifiant = request.getParameter("pseudo");	
+		
+		try {
+			Utilisateur utilisateur = new Utilisateur();
+			request.setAttribute("utilisateur", utilisateur);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+				
+		String pseudo = request.getParameter("pseudo");
 		String nom = request.getParameter("nom");
 		String prenom = request.getParameter("prenom");
 		String email = request.getParameter("email");
@@ -46,53 +66,36 @@ public class ServletModifierProfil extends HttpServlet {
 		String rue = request.getParameter("rue");
 		String codePostal = request.getParameter("codePostal");
 		String ville = request.getParameter("ville");
-		String motDePasse = request.getParameter("motDePasse");
 		String nouveauMotDePasse = request.getParameter("nouveauMotDePasse");
-		String confirmationMotDePasse = request.getParameter("confirmationMotDePasse");
-					
-		try {
-			if (nouveauMotDePasse != null) {
-				if (!nouveauMotDePasse.equals(confirmationMotDePasse)) {					
-					rd = request.getRequestDispatcher("/WEB-INF/modifierProfil.jsp");
-					rd.forward(request, response);
-				} else {
-					utilisateur = utilisateurManager.retournerUtilisateur(identifiant);
-					utilisateur.setPseudo(identifiant);
-					utilisateur.setNom(nom);
-					utilisateur.setPrenom(prenom);
-					utilisateur.setEmail(email);
-					utilisateur.setTelephone(telephone);
-					utilisateur.setRue(rue);
-					utilisateur.setCodePostal(codePostal);
-					utilisateur.setVille(ville);
-					utilisateur.setMotDePasse(nouveauMotDePasse);
-					utilisateurManager.modificationUtilisateur(utilisateur);
-						
-					utilisateur = utilisateurManager.retournerUtilisateur(identifiant);
-					session.setAttribute("utilisateur", utilisateur);
-					rd = request.getRequestDispatcher("index");
-					rd.forward(request, response);
-				}
-			} else {
-				utilisateur = utilisateurManager.retournerUtilisateur(identifiant);
-				utilisateur.setPseudo(identifiant);
-				utilisateur.setNom(nom);
-				utilisateur.setPrenom(prenom);
-				utilisateur.setEmail(email);
-				utilisateur.setTelephone(telephone);
-				utilisateur.setRue(rue);
-				utilisateur.setCodePostal(codePostal);
-				utilisateur.setVille(ville);
-				utilisateur.setMotDePasse(motDePasse);
-				utilisateurManager.modificationUtilisateur(utilisateur);
-					
-				utilisateur = utilisateurManager.retournerUtilisateur(identifiant);
-				session.setAttribute("utilisateur", utilisateur);
-				rd = request.getRequestDispatcher("index");
-				rd.forward(request, response);
-			}				
-		} catch (Exception e) {
-			e.printStackTrace();
+		String confirmationMotDePasse = request.getParameter("confirmationMotDePasse"); 
+		Integer credit = Integer.parseInt(session.getAttribute("credit").toString());
+		boolean admin = false; 
+		
+		Utilisateur utilisateur = new Utilisateur(); 
+		utilisateur.setPseudo(pseudo);
+		utilisateur.setNom(nom);
+		utilisateur.setPrenom(prenom);
+		utilisateur.setEmail(email);
+		utilisateur.setTelephone(telephone);
+		utilisateur.setRue(rue);
+		utilisateur.setCodePostal(codePostal);
+		utilisateur.setVille(ville);
+		utilisateur.setMotDePasse(nouveauMotDePasse);
+		utilisateur.setCredit(credit);
+		utilisateur.setAdministrateur(admin);
+		int id =  (Integer) session.getAttribute( "idUserSession" );
+		utilisateur.setNumero(id);
+		
+		if(nouveauMotDePasse.equals(confirmationMotDePasse)) {
+			try {
+				modifUtilisateur.modificationUtilisateur(utilisateur);
+				request.setAttribute("utilisateur", utilisateur);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/monProfil.jsp");
+			rd.forward(request, response);
 		}
 	}
 

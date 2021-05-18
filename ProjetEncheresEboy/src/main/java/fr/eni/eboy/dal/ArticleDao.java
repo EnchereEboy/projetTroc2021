@@ -17,26 +17,21 @@ import fr.eni.eboy.bo.Categorie;
 public interface ArticleDao {
 
 	    Article ajouter(Article articleAAjouter) throws Exception  ; 
-	 
-	 Article selectById(int id);
-	 
-	 boolean updateById(int id);
-	 
 	 /*
 	  * Début avec les Create Update Delete
 	  */
 	 	Article insert(Article article);
 	 	
-	 	boolean delete (int id);
+	 	boolean delete (Integer idArticle);
 	 	
-	 	Article update(Article article);
+	 	public boolean update(Article article);
 
 	 	/*
 	 	 * Methode spécifique utile pour l'affichage de l'écran d'acceuil
 	 	 */
-	 	List<Article> selectByCategorieAndNameAndUtilisateur(Categorie cat, String recherche, int idUtilisateur);
+	 	List<Article> selectByCategorieAndNameAndUtilisateur(Categorie cat, String recherche, Integer idUtilisateur);
 
-	 	List<Article> selectByCategorieAndNameAndUtilisateurGagnee(Categorie cat, String recherche, int idUtilisateur);
+	 	List<Article> selectByCategorieAndNameAndUtilisateurGagnee(Categorie cat, String recherche, Integer idUtilisateur);
 
 	 	List<Article> selectByCategorieAndNameEnCours(Categorie cat, String recherche);
 

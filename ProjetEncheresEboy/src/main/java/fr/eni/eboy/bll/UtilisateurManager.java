@@ -11,6 +11,17 @@ public class UtilisateurManager {
 		utilisateurDao = DaoFactory.getUtilisateurDao();
 	}
 	
+	public Utilisateur insertConnection(String pseudo, String motDePasse) {
+		return DaoFactory.getUtilisateurDao().insertConnection(pseudo,motDePasse);
+	}
+
+	public Utilisateur insert(Utilisateur nouveauUser) {
+		
+		//Utilisateur nouvelUtilisateur = new Utilisateur(pseudo,prenom,telephone,codePostal,motDePasse,nom,email,rue,ville);
+		
+		//J'appelle la DAO, je fais la méthode insert et le tout me renvoie les info du nouvel inscrit
+		return DaoFactory.getUtilisateurDao().insert(nouveauUser);
+	}
 	public Utilisateur retournerUtilisateur(String pseudo) {
 		return utilisateurDao.selectByPseudo(pseudo);
 	}

@@ -1,9 +1,6 @@
 package fr.eni.eboy.servlets;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -13,12 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import fr.eni.eboy.bll.ArticleManager;
+import fr.eni.eboy.bll.CategorieManager;
 import fr.eni.eboy.bll.EnchereManager;
 import fr.eni.eboy.bo.Article;
 import fr.eni.eboy.bo.Categorie;
 import fr.eni.eboy.bo.Enchere;
-import fr.eni.eboy.bo.Utilisateur;
-import fr.eni.eboy.dal.ArticleDaoJdbcImpl;
 
 /**
  * Servlet implementation class ServletAcceuil
@@ -74,7 +70,18 @@ public class ServletAcceuil extends HttpServlet {
 		
 		String texteRechercheParam = request.getParameter("recherche");
 		String categorieParam = request.getParameter("categorie");
-		List<Article> listeArticlesAcceuil = new ArticleManager().selectAllEnCours();
+		
+		//fait la recherche de toute les vente en cours
+		//List<Article> listeArticlesAcceuil = new ArticleManager().selectAllEnCours();
+		
+		//fait la recherche de toute les ventes(en cours ou non) de l'utilisateur connecté et selon la recherche et catégorie
+		Integer idUtilisateur = 1; //num  utilisateur bogoss
+		Categorie categorieRecherchee = new CategorieManager().selectById(Integer.parseInt(categorieParam));
+		texteRechercheParam = texteRechercheParam.toLowerCase().trim();
+		System.out.println("texte recherche size :"+ texteRechercheParam.length());
+		List<Article> listeArticlesAcceuil = new ArticleManager().selectByCategorieAndNameAndUtilisateur(categorieRecherchee, texteRechercheParam, idUtilisateur);
+//		List<Article> listeArticlesAcceuil = new ArticleManager().selectAllEnCours();
+		
 		request.setAttribute("articles", listeArticlesAcceuil);
 		
 		//--------DEBUG
@@ -100,34 +107,35 @@ public class ServletAcceuil extends HttpServlet {
 		}
 		
 		System.out.println("Listes des articles affiché :" + listeArticlesAcceuil.toString());
-		System.out.println( listeArticlesAcceuil.isEmpty());
-		System.out.println(listeArticlesAcceuil.size());
+		System.out.println("Liste vide :"+ listeArticlesAcceuil.isEmpty());
+		System.out.println("Taille de liste :"+listeArticlesAcceuil.size());
 		//System.out.println(listeArticlesAcceuil.listIterator());
 		
-		System.out.println(texteRechercheParam); //Debug Parameter recherche
-		System.out.println(categorieParam); // Debug Parameter categorie
+		System.out.println("texteRechercheParam : "+texteRechercheParam ); //Debug Parameter recherche
+		System.out.println("categorieParam : "+categorieParam ); // Debug Parameter categorie
+		
 		//--------- DEBUG FIN
 		
 		//---Debug 2
-		List<Article> listeArticlesSelectAll = new ArticleManager().selectAll();
-		System.out.println( listeArticlesSelectAll.isEmpty());
-		System.out.println(listeArticlesSelectAll.size());
-		System.out.println("Listes des articles affiché SELECT ALL :" + listeArticlesSelectAll.toString());
-		
+//		List<Article> listeArticlesSelectAll = new ArticleManager().selectAll();
+//		System.out.println( listeArticlesSelectAll.isEmpty());
+//		System.out.println(listeArticlesSelectAll.size());
+//		System.out.println("Listes des articles affiché SELECT ALL :" + listeArticlesSelectAll.toString());
+//		
 
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
 		rd.forward(request, response);
-		Article a1 = new Article();
-		Article a2 = new Article();
-		a2 = listeArticlesSelectAll.get(0);
-		a1 = listeArticlesSelectAll.get(1);
-		System.out.println("a1 :"+a1);
-		System.out.println("a2 :"+a2);
-		Enchere enchere1 = new EnchereManager().selectByArticleMeilleurOffre(a1);
-		Enchere enchere2 = new EnchereManager().selectByArticleMeilleurOffre(a2);
-		
-		System.out.println("Enchere testant le selectById 1"+enchere1);
-		System.out.println("Enchere testant le selectById 2"+enchere2);
+//		Article a1 = new Article();
+//		Article a2 = new Article();
+//		a2 = listeArticlesSelectAll.get(0);
+//		a1 = listeArticlesSelectAll.get(1);
+//		System.out.println("a1 :"+a1);
+//		System.out.println("a2 :"+a2);
+//		Enchere enchere1 = new EnchereManager().selectByArticleMeilleurOffre(a1);
+//		Enchere enchere2 = new EnchereManager().selectByArticleMeilleurOffre(a2);
+//		
+//		System.out.println("Enchere testant le selectById 1"+enchere1);
+//		System.out.println("Enchere testant le selectById 2"+enchere2);
 	}
 
 }

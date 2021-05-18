@@ -18,7 +18,7 @@
 <body class="container">
 	<h2>ENI-Encheres</h2>
 	<br>
-	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/acceuil")%>">S'inscrire
+	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/ServletConnexion")%>">S'inscrire
 		- Se connecter</a>
 	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/NouvelleVente")%>">Vendre un article</a>
 	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/monProfil")%>">Mon Profil</a>
@@ -36,11 +36,11 @@
 			</div>
 			<div>
 				<label for="categorie">Catégorie :</label> <select name="categorie">
-					<option value="Toutes" selected>Toutes</option>
-					<option value="Informatique">Informatique</option>
-					<option value="Ameublement">Ameublement</option>
-					<option value="Vetement">Vêtement</option>
-					<option value="Sport&Loisirs">Sport&Loisirs</option>
+					<option value=0 selected>Toutes</option>
+					<option value=1>Informatique</option>
+					<option value=2>Ameublement</option>
+					<option value=3>Vêtement</option>
+					<option value=4>Sport&Loisirs</option>
 				</select>
 			</div>
 		</form>

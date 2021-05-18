@@ -114,7 +114,12 @@ public class ArticleManager {
 		return DaoFactory.getArticleDao().selectByCategorieAndNameAndUtilisateurGagnee(cat, recherche, idUtilisateur);
 	}
 	
-	
+	public List<Article> selectByCategorieAndNameAndUtilisateur(Categorie cat, String recherche, Integer idUtilisateur){
+		return DaoFactory.getArticleDao().selectByCategorieAndNameAndUtilisateur(cat, recherche, idUtilisateur);
+	} 
    
+	public List<Article> selectByCategorieAndNameAndUtilisateurGagnee(Categorie cat, String recherche, Integer idUtilisateur){
+		return DaoFactory.getArticleDao().selectByCategorieAndNameAndUtilisateurGagnee(cat, recherche, idUtilisateur);
+	} 
    
 }

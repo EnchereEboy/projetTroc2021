@@ -8,40 +8,33 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import fr.eni.eboy.bll.UtilisateurManager;
-import fr.eni.eboy.bo.Utilisateur;
+import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class ServletProfil
+ * Servlet implementation class ServletDisconnect
  */
-@WebServlet("/profil")
-public class ServletProfil extends HttpServlet {
+@WebServlet("/ServletDisconnect")
+public class ServletDisconnect extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Integer idVendeur = Integer.parseInt(request.getParameter("id"));
-		System.out.println(idVendeur);
-		UtilisateurManager utilisateurManager = new UtilisateurManager();
-		Utilisateur vendeur = new Utilisateur();
+		 
 		
-		try {
-			vendeur = utilisateurManager.retournerUtilisateurParId(idVendeur);
-			request.setAttribute("vendeur", vendeur);
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/profil.jsp");
-			rd.forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		 /* Récupération et destruction de la session en cours */
+        HttpSession sessionEnchere = request.getSession();
+        sessionEnchere.invalidate();
+        RequestDispatcher rd = request.getRequestDispatcher("/ServletHome");
+		rd.forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

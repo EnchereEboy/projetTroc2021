@@ -51,6 +51,35 @@ public class Utilisateur implements Serializable{
 		setListeEncheres(listeEncheres);
 	}
 	
+	/**
+	 * Constructeur.
+	 * @param pseudo
+	 * @param nom
+	 * @param prenom
+	 * @param email
+	 * @param telephone
+	 * @param rue
+	 * @param codePostal
+	 * @param ville
+	 * @param motDePasse
+	 * @param credit
+	 */
+	public Utilisateur(String pseudo2, String nom2, String prenom2, String email2, String telephone2, String rue2,
+			String codePostal2, String ville2, String motDePasse2, Integer credit) {
+		this();
+		setNumero(numero);
+		setPseudo(pseudo);
+		setNom(nom);
+		setPrenom(prenom);
+		setEmail(email);
+		setTelephone(telephone);
+		setRue(rue);
+		setCodePostal(codePostal);
+		setVille(ville);
+		setMotDePasse(motDePasse);
+		setCredit(credit);
+	}
+
 	public Integer getNumero() {
 		return numero;
 	}

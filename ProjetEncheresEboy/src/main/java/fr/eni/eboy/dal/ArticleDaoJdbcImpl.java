@@ -106,6 +106,12 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 //			+ "no_categorie)" 
 //			+ "VALUES(? ,?, ?, ?, ?, ?, ?, ?)"; 
 	private static final String REQ_INSERT_RETRAIT="INSERT INTO RETRAITS (no_article , rue , code_postal , ville) VALUES(?, ?, ?, ?)";
+	private static final String REQ_SELECT_BY_CAT_AND_NAME_AND_USER = "SELECT * "
+			+ "FROM ARTICLES_VENDUS "
+			+ "WHERE "
+			+ NUM_CAT_COL + "=? "
+			+ "AND " + NUM_UTIL_COL +"=? "
+			+ "AND LOWER("+ NOM_COL +") LIKE  ?";
 	
 //	private static final String REQ_SELECTBYID="select nom_article,description,date_debut_encheres,"
 //			+ "date_fin_encheres,prix_initial,prix_vente,no_utilisateur,no_categorie,etat_vente\r\n"
@@ -219,73 +225,48 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 		}
 		return listeArticlesARetourner;
 	}
-	
-	private Article map(ResultSet rs) throws SQLException{
-		//---- Debut debug sysout
-		String debug;
-		debug = rs.getString(NUM_COL);
-		System.out.println(debug);
-		debug = rs.getString(NOM_COL);
-		System.out.println(debug);
-		debug = rs.getString(DESC_COL);
-		System.out.println(debug);
-		debug = rs.getString(DATE_DEBUT_COL);
-		System.out.println(debug);
-		debug = rs.getString(DATE_FIN_COL);
-		System.out.println(debug);
-		debug = rs.getString(PRIX_INIT_COL);
-		System.out.println(debug);
-		debug = rs.getString(PRIX_VENTE_COL);
-		System.out.println(debug);
-		debug = rs.getString(NUM_UTIL_COL);
-		System.out.println(debug);
-		debug = rs.getString(NUM_CAT_COL);
-		System.out.println(debug);
-		debug = rs.getString(ETAT_VENTE_COL);
-		System.out.println(debug);
-		///----Fin debug sysout
-		Integer id = rs.getInt(NUM_COL);
-		String nom = rs.getString(NOM_COL);
-		String description = rs.getString(DESC_COL);
-		LocalDateTime dateDebutEncheres = LocalDateTime.parse(rs.getString(DATE_DEBUT_COL), formatBDDVersJavaLocalDateTime);
-		LocalDateTime dateFinEncheres = LocalDateTime.parse(rs.getString(DATE_FIN_COL), formatBDDVersJavaLocalDateTime);
-		Integer prixInitial = rs.getInt(PRIX_INIT_COL);
-		Integer prixVente = rs.getInt(PRIX_VENTE_COL);
-		boolean etatVente = rs.getBoolean(ETAT_VENTE_COL);
-		Integer idUtilisateur = rs.getInt(NUM_UTIL_COL);
-		Utilisateur utilisateur = DaoFactory.getUtilisateurDao().selectById(idUtilisateur);
-		Integer idCategorie = rs.getInt(NUM_CAT_COL);
-		Categorie categorie = DaoFactory.getCategorieDao().selectById(idCategorie);
-		//java.sql.Date.valueOf(articleAAjouter.getDate_debut_encheres().format(formatJourMoisAnneeHeureMinute))
-		return new Article(id, nom, description, dateDebutEncheres, dateFinEncheres, prixInitial, prixVente, etatVente, utilisateur, categorie);
-	}
-
 
 	
 	
 	
 	
 	@Override
-	public boolean delete(int id) {
-		// TODO Auto-generated method stub
+	public boolean delete(Integer id) {
+		// TODO  itération 2 pour supprimer un article
 		return false;
 	}
 
 	@Override
-	public Article update(Article article) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean update(Article article) {
+		boolean reussiteUpdate = false;
+		// TODO itération 2 pour modifier un article
+		return reussiteUpdate;
 	}
 
 	@Override
-	public List<Article> selectByCategorieAndNameAndUtilisateur(Categorie cat, String recherche, int idUtilisateur) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Article> selectByCategorieAndNameAndUtilisateur(Categorie cat, String recherche, Integer idUtilisateur) {
+
+		List<Article> listeArticlesARetourner = new ArrayList<Article>();
+		try (Connection cnx =ConnectionProvider.getConnection()){
+			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_AND_USER);
+			pStmt.setInt(1, cat.getNumero());
+			pStmt.setInt(2, idUtilisateur);
+			pStmt.setString(3, "%" + recherche + "%");
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()) {
+				listeArticlesARetourner.add(map(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listeArticlesARetourner;
 	}
+
+	
 
 	@Override
 	public List<Article> selectByCategorieAndNameAndUtilisateurGagnee(Categorie cat, String recherche,
-			int idUtilisateur) {
+			Integer idUtilisateur) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -340,29 +321,46 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 	}
 
 
-
-
-	/**
-	* {@inheritDoc}
-	*/
-	@Override
-	public Article selectById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-
-	/**
-	* {@inheritDoc}
-	*/
-	@Override
-	public boolean updateById(int id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	
+	
+	private Article map(ResultSet rs) throws SQLException{
+		//---- Debut debug sysout
+		String debug;
+		debug = rs.getString(NUM_COL);
+		System.out.println(debug);
+		debug = rs.getString(NOM_COL);
+		System.out.println(debug);
+		debug = rs.getString(DESC_COL);
+		System.out.println(debug);
+		debug = rs.getString(DATE_DEBUT_COL);
+		System.out.println(debug);
+		debug = rs.getString(DATE_FIN_COL);
+		System.out.println(debug);
+		debug = rs.getString(PRIX_INIT_COL);
+		System.out.println(debug);
+		debug = rs.getString(PRIX_VENTE_COL);
+		System.out.println(debug);
+		debug = rs.getString(NUM_UTIL_COL);
+		System.out.println(debug);
+		debug = rs.getString(NUM_CAT_COL);
+		System.out.println(debug);
+		debug = rs.getString(ETAT_VENTE_COL);
+		System.out.println(debug);
+		///----Fin debug sysout
+		Integer id = rs.getInt(NUM_COL);
+		String nom = rs.getString(NOM_COL);
+		String description = rs.getString(DESC_COL);
+		LocalDateTime dateDebutEncheres = LocalDateTime.parse(rs.getString(DATE_DEBUT_COL), formatBDDVersJavaLocalDateTime);
+		LocalDateTime dateFinEncheres = LocalDateTime.parse(rs.getString(DATE_FIN_COL), formatBDDVersJavaLocalDateTime);
+		Integer prixInitial = rs.getInt(PRIX_INIT_COL);
+		Integer prixVente = rs.getInt(PRIX_VENTE_COL);
+		boolean etatVente = rs.getBoolean(ETAT_VENTE_COL);
+		Integer idUtilisateur = rs.getInt(NUM_UTIL_COL);
+		Utilisateur utilisateur = DaoFactory.getUtilisateurDao().selectById(idUtilisateur);
+		Integer idCategorie = rs.getInt(NUM_CAT_COL);
+		Categorie categorie = DaoFactory.getCategorieDao().selectById(idCategorie);
+		//java.sql.Date.valueOf(articleAAjouter.getDate_debut_encheres().format(formatJourMoisAnneeHeureMinute))
+		return new Article(id, nom, description, dateDebutEncheres, dateFinEncheres, prixInitial, prixVente, etatVente, utilisateur, categorie);
+	}
 	
 }
