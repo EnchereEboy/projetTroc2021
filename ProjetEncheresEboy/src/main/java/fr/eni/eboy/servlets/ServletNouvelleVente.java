@@ -31,9 +31,9 @@ public class ServletNouvelleVente extends HttpServlet {
 			throws ServletException, IOException {
 		
 		if(request.getServletPath().equals("/index")) {
-			String idUser1 = request.getParameter("id");
+			String idUser1 = request.getParameter("idUser");
 			  if(idUser1!=null){
-	    	System.out.println(request.getParameter("id"));
+	    	System.out.println(request.getParameter("idUser"));
 			    
 		    try{   
 		    	Integer idUser = Integer.parseInt(idUser1); 
