@@ -51,12 +51,21 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	private static final String NUM_ARTICLE_COL = "no_article";
 	private static final String NUM_UTILISATEUR_COL = "no_utilisateur";
 	private static final String ETAT_VENTE_COL = "etat_vente";
+	/**
+	 *  Constante du nom de la colonne de BDD pour la table ARTICLE_VENDUS
+	 */
+	private static final String NOM_COL = "nom_article";
+	/**
+	 * Constante du nom de la colonne de BDD pour la table ARTICLE_VENDUS
+	 */
+	private static final String NUM_CAT_COL = "no_categorie";
 	private static final String REQ_SELECT_BY_CAT_AND_NAME_AND_ACHETEUR = "SELECT * "
-			+ "FROM ARTICLES_VENDUS "
+			+ "FROM ENCHERES e"
+			+ "JOIN ARTICLES_VENDUS a ON e."+ NUM_COL +"=a."+NUM_COL+" "
 			+ "WHERE "
-			+ NUM_COL + "=? "
-			+ "AND " + ETAT_VENTE_COL +"=0 "
-			+ "AND LOWER("+ NOM_COL +") LIKE  ?";
+			+ NUM_UTILISATEUR_COL + "=? "
+			+ "AND " +  +"=0 "
+			+ "AND LOWER(a."+ NOM_COL +") LIKE  ?";
 	
 	
 	
