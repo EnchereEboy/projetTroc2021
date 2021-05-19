@@ -24,10 +24,11 @@
 </head>
 
 <body class="container">
-	<h2>ENI-Enchères</h2>
+	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
 	
 	<h1 class="jumbotron">Modifier mon profil</h1>
-	<h4 style="color:red; text-align: center">${incorrectOldPwd}</h4>
+	<h5 style="color:red; text-align: center">${incorrectOldPwd}</h5>
+	<h5 style="color:red; text-align: center">${msgDeconnexion}</h5>
 	<div class="jumbotron">
 		<div id="container1">
 			<form action="modifierProfil" method="post">
@@ -72,7 +73,7 @@
 		      	<p>Crédit :	${userUpdate.credit}</p>
 		        <br>
 				<button type="submit">Enregistrer</button>
-				<button type="button"><a href="<%=request.getContextPath()%>/suppressionCompte?id=${userUpdate.numero}">Supprimer mon compte</a></button>
+				<button type="button"><a href="<%=request.getContextPath()%>/supprimerProfil?id=${userUpdate.numero}">Supprimer mon compte</a></button>
 		      </div>
 		            
 	  		</form>

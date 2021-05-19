@@ -76,6 +76,7 @@ public class ServletAccueil extends HttpServlet {
 		//--------DEBUG
 		//fait la recherche de toute les ventes(en cours ou non) de l'utilisateur connecté et selon la recherche et catégorie
 		Integer idUtilisateur = 1; //num  utilisateur bogoss
+		
 		Categorie categorieRecherchee = new CategorieManager().selectById(Integer.parseInt(categorieParam));
 		texteRechercheParam = texteRechercheParam.toLowerCase().trim();
 		System.out.println("texte recherche size :"+ texteRechercheParam.length());

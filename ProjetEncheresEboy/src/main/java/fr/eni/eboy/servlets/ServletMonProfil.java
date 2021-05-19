@@ -25,23 +25,31 @@ public class ServletMonProfil extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession sessionEncheres = request.getSession();
-		Integer idUser = Integer.parseInt(request.getParameter("id"));
-		sessionEncheres.setAttribute( "idUserSession", idUser );
-		
-//		Integer idUser = Integer.parseInt(request.getParameter("id"));
-		UtilisateurManager utilisateurManager = new UtilisateurManager();
-		Utilisateur utilisateur = new Utilisateur();
-				
-		try {
-			utilisateur = utilisateurManager.retournerUtilisateurParId(idUser);
-			request.setAttribute("utilisateur", utilisateur);
-			sessionEncheres.setAttribute( "credit", utilisateur.getCredit() );
-			sessionEncheres.setAttribute("userReturnedSession", utilisateur);
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/monProfil.jsp");
+//		sessionEncheres.getAttribute("idUser");
+		if( sessionEncheres.getAttribute("idUser")==null) { 
+			RequestDispatcher rd = request.getRequestDispatcher("/index");
 			rd.forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
+			
+		}else {
+			 Integer idUser = Integer.parseInt(request.getParameter("id"));
+			sessionEncheres.setAttribute( "idUser", idUser ); 
+			UtilisateurManager utilisateurManager = new UtilisateurManager();
+			Utilisateur utilisateur = new Utilisateur();
+					
+			try {
+				utilisateur = utilisateurManager.retournerUtilisateurParId(idUser);
+				request.setAttribute("utilisateur", utilisateur);
+				sessionEncheres.setAttribute( "credit", utilisateur.getCredit() );
+				sessionEncheres.setAttribute("userReturnedSession", utilisateur);
+				RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/monProfil.jsp");
+				rd.forward(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+			
+			
+	//		
 	}
 
 	/**

@@ -20,7 +20,7 @@ color: red;}
   </head>
 
   <body>
-  	 <h1>ENI-Enchères</h1>
+  	 <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
  
 <h3>${messageUser}</h3>
   	<form action="<%=request.getContextPath() %>/ServletConnexion" method="POST">

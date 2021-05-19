@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+ 
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,16 +14,28 @@
 
 </head>
 <body class="container">
-	<h2>ENI-EnchÃ¨res</h2>
-	<br>
-	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/ServletConnexion")%>">S'inscrire
-		- Se connecter</a>
-	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/NouvelleVente")%>">Vendre un article</a>
-	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/monProfil")%>">Mon Profil</a>
 	
-	
+	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
 	<br>
-	<h1 class="jumbotron">Liste des enchÃ¨res</h1>
+<c:choose>
+    <c:when test="${empty idUser}">
+        <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/ServletConnexion")%>">S'inscrire
+			- Se connecter</a>
+		<br> 
+    </c:when>
+    <c:otherwise>
+         <br>  
+		 <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/enchere")%>">Encheres</a>  
+		 <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/NouvelleVente")%>">Vendre un article</a>  
+		 <a href="<%=request.getContextPath()%>/monProfil?id=${idUser}">Mon profil</a>  
+		 
+		 <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/ServletDisconnect")%>">Deconnexion</a>	   
+ 		<br> 
+    </c:otherwise>
+</c:choose>
+	<h3>${msgDeconnexion}</h3>
+	<br>
+	<h1 class="jumbotron">Liste des enchères</h1>
 
 	<div class="jumbotron">
 		<form method="post">
@@ -35,11 +45,11 @@
 				<input type="submit" name="recherche" value="Recherche">
 			</div>
 			<div>
-				<label for="categorie">CatÃ©gorie :</label> <select name="categorie">
+				<label for="categorie">Catégorie :</label> <select name="categorie">
 					<option value=0 selected>Toutes</option>
 					<option value=1>Informatique</option>
 					<option value=2>Ameublement</option>
-					<option value=3>VÃªtement</option>
+					<option value=3>Vêtement</option>
 					<option value=4>Sport&Loisirs</option>
 				</select>
 			</div>
@@ -58,7 +68,7 @@
 							<br> <br>
 							<p>Prix : ${a.prixVente } points</p>
 							<br>
-							<p>Fin de l'enchÃ¨re : ${a.dateFinEncheres }</p>
+							<p>Fin de l'enchère : ${a.dateFinEncheres }</p>
 							<br> <br>
 							<p>Vendeur : <a href=' <c:url value=" ./profil?id=${a.utilisateur.numero } "/> '> ${a.utilisateur.pseudo}</a> </p>
 						</div>

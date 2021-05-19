@@ -67,10 +67,10 @@ public class ServletConnexion extends HttpServlet {
 			//On recupere l'identifiant de l'utilisateur
 			Integer idUser=userConnected.getNumero();
 			// On le stock dans une variable de session
-			sessionEnchere.setAttribute("idUserSession", idUser);
+			sessionEnchere.setAttribute("idUser", idUser);
 //			sessionEnchere.setAttribute("objetUser", userConnected);
 			request.setAttribute("utilisateurconnecte", userConnected);
-			RequestDispatcher rd = request.getRequestDispatcher("/index");
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
 			rd.forward(request, response);
 		}
 		

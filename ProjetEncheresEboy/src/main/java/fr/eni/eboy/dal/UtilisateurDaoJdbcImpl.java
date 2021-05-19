@@ -21,10 +21,10 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 	private final static String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS(pseudo,nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe,credit,administrateur) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
 	private final static String SELECT_UTILISATEUR = "SELECT * FROM UTILISATEURS WHERE (pseudo=? OR email=?) and mot_de_passe=?";
 	private static final String DELETE_USER = "DELETE Utilisateurs WHERE no_utilisateur=?"
-			+ " AND (SELECT COUNT(*) FROM Utilisateurs u RIGHT JOIN Articles_Vendus"
+			+ " AND (SELECT COUNT(*) FROM Utilisateurs u RIGHT JOIN Articles_Vendus ave"
 			+ " ON u.no_utilisateur = ave.no_utilisateur"
 			+ " WHERE ave.no_utilisateur=?)=0"
-			+ " AND (SELECT COUNT(*) FROM Utilisateurs u RIGHT JOIN  Encheres"
+			+ " AND (SELECT COUNT(*) FROM Utilisateurs u RIGHT JOIN  Encheres e"
 			+ " ON u.no_utilisateur = e.no_utilisateur"
 			+ " WHERE e.no_utilisateur=?)=0";
 		

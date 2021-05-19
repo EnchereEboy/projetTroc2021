@@ -87,8 +87,10 @@ public class ServletInscription extends HttpServlet {
 					
 				}else {
 					//Création de la fiche d'information saisie par l'utlisateur
+					
 					Utilisateur nouveauUtilisateur = new Utilisateur( pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, 100);					
 					//Récupération des infoInscription puis le manager va faire l'insert 
+					System.out.println(nouveauUtilisateur );
 					Utilisateur utilisateurAjout = new UtilisateurManager().insert(nouveauUtilisateur);
 					//on cree une session si elle n'existe pas
 				
@@ -105,7 +107,7 @@ public class ServletInscription extends HttpServlet {
 					request.removeAttribute("rue");
 					request.removeAttribute("codePostal");
 					request.removeAttribute("ville");
-					RequestDispatcher rd = request.getRequestDispatcher("/index");
+					RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
 					rd.forward(request, response);
 				}
  

@@ -4,12 +4,13 @@
 <link href="css/style.css" rel="stylesheet" media="all">
 </head>
 <body>
+<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
    <form  action="<%=request.getContextPath() %>/NouvelleVente"  method="POST"   >
                  <table     id="MaTable" class="tabcenter">
 						<tbody>  
-						<caption> Nouvelle vente <c:out value="Bonjour !" /> </caption>
+						<caption> Nouvelle vente   </caption>
 						<tr  >
-						<td  rowspan="9"><img class="fit-picture" src="images/bonnet.jpg" alt="Photo de l'article"></td>
+						<td  rowspan="9"><img class="fit-picture" src="images/NoImage.png" alt="Photo de l'article"></td>
 						<td >Article :</td>
 						<td ><input type ="text" name="article" id="article" placeholder="Nom de l'article." required></td>
 						</tr>

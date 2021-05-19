@@ -20,7 +20,7 @@
 </head>
 
 <body class="container">
-	<h2>ENI-Enchères</h2>
+	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
 	<br>
 	
 	<h1 class="jumbotron">Mon profil</h1>

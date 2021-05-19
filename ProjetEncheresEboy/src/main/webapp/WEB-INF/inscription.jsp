@@ -12,12 +12,13 @@ body {
 table {
 	margin: auto;
 }
+h4{color:red;}
 </style>
 
 </head>
 
 <body>
-	<h1>ENI-Enchères</h1>
+	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
 
 	<form action="<%=request.getContextPath()%>/ServletInscription"
 		method="POST">
@@ -31,13 +32,13 @@ table {
 						minlength="1" maxlength="30" value='${pseudo}' required></td>
 					<td>Nom:</td>
 					<td><input type="text" id="idnom" name="nom" minlength="1"
-						maxlength="30" value='${nom}' required></td>
+						maxlength="30" value='${nom}' pattern=".{1,30}.[A-Za-z -]"  required></td>
 				</tr>
 
 				<tr>
 					<td>Prenom:</td>
 					<td><input type="text" id="idprenom" name="prenom"
-						minlength="3" maxlength="30" value='${prenom}' required></td>
+						minlength="3" maxlength="30" value='${prenom}' pattern=".{1,30}.[A-Za-z -]" required></td>
 					<td>Email:</td>
 					<td><input type="email" id="idemail" name="email"
 						minlength="4" maxlength="50" value='${email}' required></td>
@@ -46,7 +47,7 @@ table {
 				<tr>
 					<td>Telephone:</td>
 					<td><input type="tel" id="idtel" name="telephone" min="10"
-						max="15" value='${telephone}' required></td>
+						max="15" value='${telephone}'  pattern=".{8}.[0-9]" required></td>
 					<td>Rue:</td>
 					<td><input type="text" id="idrue" name="rue" minlength="1"
 						maxlength="30" value='${rue}' required></td>
@@ -55,10 +56,10 @@ table {
 				<tr>
 					<td>Code Postal:</td>
 					<td><input type="text" id="idcp" name="cp" minlength="1"
-						maxlength="6" value='${codePostal}' required></td>
+						maxlength="6" value='${codePostal}' pattern=".{3}.[0-9]" required></td>
 					<td>Ville:</td>
 					<td><input type="text" id="idville" name="ville" minlength="1"
-						maxlength="50" value='${ville}' required></td>
+						maxlength="50" value='${ville}' pattern=".{1,50}.[A-Za-z -]" required></td>
 				</tr>
 
 				<tr>

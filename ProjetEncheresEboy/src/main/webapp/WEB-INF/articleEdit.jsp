@@ -4,6 +4,7 @@
 <link href="css/style.css" rel="stylesheet" media="all">
 </head>
 <body>
+<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
    <form  action="<%=request.getContextPath() %>/EditVente"  method="POST"   >
                  <table     id="MaTable" class="tabcenter">
 						<tbody>  
