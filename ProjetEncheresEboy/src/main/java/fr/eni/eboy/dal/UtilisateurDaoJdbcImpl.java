@@ -8,6 +8,10 @@ import java.sql.Statement;
 
 import fr.eni.eboy.bo.Utilisateur;
 
+/**
+ * Classe contenant les methodes pour acceder à la table Utilisateurs. 
+ * @author dphelep2021
+ */
 public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 	private static final String SELECT_BY_PSEUDO = "SELECT * FROM Utilisateurs WHERE pseudo=?";
 	private static final String SELECT_BY_ID = "SELECT * FROM Utilisateurs WHERE no_utilisateur=?";
@@ -16,9 +20,14 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 			+ " WHERE no_utilisateur=?";
 	private final static String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS(pseudo,nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe,credit,administrateur) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
 	private final static String SELECT_UTILISATEUR = "SELECT * FROM UTILISATEURS WHERE (pseudo=? OR email=?) and mot_de_passe=?";
-	
-	private Utilisateur utilisateur = new Utilisateur();
-	
+	private static final String DELETE_USER = "DELETE Utilisateurs WHERE no_utilisateur=?"
+			+ " AND (SELECT COUNT(*) FROM Utilisateurs u RIGHT JOIN Articles_Vendus"
+			+ " ON u.no_utilisateur = ave.no_utilisateur"
+			+ " WHERE ave.no_utilisateur=?)=0"
+			+ " AND (SELECT COUNT(*) FROM Utilisateurs u RIGHT JOIN  Encheres"
+			+ " ON u.no_utilisateur = e.no_utilisateur"
+			+ " WHERE e.no_utilisateur=?)=0";
+		
 	@Override
 	public Utilisateur insertConnection(String pseudoOuEmail, String password) {
 		Utilisateur utilisateur = new Utilisateur(); 
@@ -87,23 +96,13 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 	
 	@Override
 	public Utilisateur selectByPseudo(String pseudo) {
+		Utilisateur utilisateur = null;
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pStmt = cnx.prepareStatement(SELECT_BY_PSEUDO);
 			pStmt.setString(1, pseudo);
 			ResultSet rs = pStmt.executeQuery();
-			if (rs.next()) {
-				utilisateur.setNumero(rs.getInt("no_utilisateur"));
-				utilisateur.setPseudo(rs.getString("pseudo"));
-				utilisateur.setNom(rs.getString("nom"));
-				utilisateur.setPrenom(rs.getString("prenom"));
-				utilisateur.setEmail(rs.getString("email"));
-				utilisateur.setTelephone(rs.getString("telephone"));
-				utilisateur.setRue(rs.getString("rue"));
-				utilisateur.setCodePostal(rs.getString("code_postal"));
-				utilisateur.setVille(rs.getString("ville"));
-				utilisateur.setMotDePasse(rs.getString("mot_de_passe"));
-				utilisateur.setCredit(rs.getInt("credit"));
-				utilisateur.setAdministrateur(rs.getBoolean("administrateur"));				
+			if(rs.next()) {
+				utilisateur = itemBuilder(rs);				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -113,32 +112,22 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 
 	@Override
 	public Utilisateur selectById(Integer numero) {
+		Utilisateur utilisateur = null;
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pStmt = cnx.prepareStatement(SELECT_BY_ID);
 			pStmt.setInt(1, numero);
 			ResultSet rs = pStmt.executeQuery();
-			if (rs.next()) {
-				utilisateur.setNumero(rs.getInt("no_utilisateur"));
-				utilisateur.setPseudo(rs.getString("pseudo"));
-				utilisateur.setNom(rs.getString("nom"));
-				utilisateur.setPrenom(rs.getString("prenom"));
-				utilisateur.setEmail(rs.getString("email"));
-				utilisateur.setTelephone(rs.getString("telephone"));
-				utilisateur.setRue(rs.getString("rue"));
-				utilisateur.setCodePostal(rs.getString("code_postal"));
-				utilisateur.setVille(rs.getString("ville"));
-				utilisateur.setMotDePasse(rs.getString("mot_de_passe"));
-				utilisateur.setCredit(rs.getInt("credit"));
-				utilisateur.setAdministrateur(rs.getBoolean("administrateur"));
+			if(rs.next()) {
+				utilisateur = itemBuilder(rs);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}		
 		return utilisateur;
-	}
+	}	
 
 	@Override
-	public void modifierUtilisateur(Utilisateur utilisateur) {
+	public void update(Utilisateur utilisateur) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pStmt = cnx.prepareStatement(UPDATE_USER);
 			
@@ -158,5 +147,37 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 			e.printStackTrace();
 		}		
 	}
-
+	
+	@Override
+	public int delete(Integer numero) {
+		int retour = 0;
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pStmt = cnx.prepareStatement(DELETE_USER);
+			pStmt.setInt(1, numero);
+			pStmt.setInt(2, numero);
+			pStmt.setInt(3, numero);
+			retour = pStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return retour;
+	}
+	
+	private Utilisateur itemBuilder(ResultSet rs) throws SQLException
+	{
+		Utilisateur utilisateur  = new Utilisateur();
+		utilisateur.setNumero(rs.getInt("no_utilisateur"));
+		utilisateur.setPseudo(rs.getString("pseudo"));
+		utilisateur.setNom(rs.getString("nom"));
+		utilisateur.setPrenom(rs.getString("prenom"));
+		utilisateur.setEmail(rs.getString("email"));
+		utilisateur.setTelephone(rs.getString("telephone"));
+		utilisateur.setRue(rs.getString("rue"));
+		utilisateur.setCodePostal(rs.getString("code_postal"));
+		utilisateur.setVille(rs.getString("ville"));
+		utilisateur.setMotDePasse(rs.getString("mot_de_passe"));
+		utilisateur.setCredit(rs.getInt("credit"));
+		utilisateur.setAdministrateur(rs.getBoolean("administrateur"));
+		return utilisateur;
+	}
 }

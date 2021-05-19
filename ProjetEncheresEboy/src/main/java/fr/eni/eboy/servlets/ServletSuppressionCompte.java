@@ -8,10 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import fr.eni.eboy.bll.UtilisateurManager;
-import fr.eni.eboy.bo.Utilisateur;
 
 /**
  * Servlet implementation class ServletSuppressionCompte
@@ -24,14 +22,19 @@ public class ServletSuppressionCompte extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UtilisateurManager utilisateurManager = new UtilisateurManager();
-		HttpSession session = request.getSession();
-		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+		Integer idUserToDelete=Integer.parseInt(request.getParameter("id"));
+		UtilisateurManager userDelete = new UtilisateurManager(); 
 		
-		utilisateurManager.supprimerUtilisateur(utilisateur.getNumero());
-		request.setAttribute("msgDeconnexion", "Votre compte a été supprimé");
-		session.setAttribute("utilisateur", null);
-		RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/accueil.jsp");
+		int retour = userDelete.supprimerUtilisateur(idUserToDelete);
+		
+		if(retour > 0) {
+			request.setAttribute("msgDeconnexion", "Votre compte a été supprimé");
+		} else {
+			request.setAttribute("msgDeconnexion", "Votre compte ne peut pas être supprimé");
+		}
+		
+		//session.setAttribute("utilisateur", null);
+		RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
 		rd.forward(request, response);
 	}
 

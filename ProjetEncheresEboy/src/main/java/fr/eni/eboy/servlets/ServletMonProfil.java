@@ -24,9 +24,9 @@ public class ServletMonProfil extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
+		HttpSession sessionEncheres = request.getSession();
 		Integer idUser = Integer.parseInt(request.getParameter("id"));
-		session.setAttribute( "idUserSession", idUser );
+		sessionEncheres.setAttribute( "idUserSession", idUser );
 		
 //		Integer idUser = Integer.parseInt(request.getParameter("id"));
 		UtilisateurManager utilisateurManager = new UtilisateurManager();
@@ -35,7 +35,8 @@ public class ServletMonProfil extends HttpServlet {
 		try {
 			utilisateur = utilisateurManager.retournerUtilisateurParId(idUser);
 			request.setAttribute("utilisateur", utilisateur);
-			session.setAttribute( "credit", utilisateur.getCredit() );
+			sessionEncheres.setAttribute( "credit", utilisateur.getCredit() );
+			sessionEncheres.setAttribute("userReturnedSession", utilisateur);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/monProfil.jsp");
 			rd.forward(request, response);
 		} catch (Exception e) {

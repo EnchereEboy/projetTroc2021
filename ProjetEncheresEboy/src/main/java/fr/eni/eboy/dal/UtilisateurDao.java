@@ -12,6 +12,8 @@ public interface UtilisateurDao {
 
 	public Utilisateur selectById(Integer numero);
 
-	public void modifierUtilisateur(Utilisateur utilisateur);
+	public void update(Utilisateur utilisateur);
+	
+	public int delete(Integer numero);
 
 }

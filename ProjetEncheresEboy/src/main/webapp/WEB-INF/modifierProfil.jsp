@@ -27,7 +27,7 @@
 	<h2>ENI-Enchères</h2>
 	
 	<h1 class="jumbotron">Modifier mon profil</h1>
-	
+	<h4 style="color:red; text-align: center">${incorrectOldPwd}</h4>
 	<div class="jumbotron">
 		<div id="container1">
 			<form action="modifierProfil" method="post">
@@ -48,7 +48,7 @@
 		        <input type="password" id="motDePasse" name="motDePasse" required="required" size="20" maxlength="20">
 		        <br>
 		        <label for="nouveauMotDePasse">Nouveau mot de passe : </label>
-		        <input type="password" id="nouveauMotDePasse" name="nouveauMotDePasse" size="20" maxlength="20" required>
+		        <input type="password" id="nouveauMotDePasse" name="nouveauMotDePasse" size="20" maxlength="20">
 		      </div>
 	
 		      <div id="form_droite">
@@ -65,14 +65,14 @@
 		        <input type="text" id="ville" name="ville" value="${userUpdate.ville}" pattern=".{1,50}.[A-Za-z -]" size="20" maxlength="20">
 		        <br><br>
 		        <label for="confirmationMotDePasse">Confirmation : </label>
-		        <input type="password" id="confirmationMotDePasse" name="confirmationMotDePasse" size="20" maxlength="20" required>
+		        <input type="password" id="confirmationMotDePasse" name="confirmationMotDePasse" size="20" maxlength="20">
 		      </div>
 	      
 		      <div id="container2">
 		      	<p>Crédit :	${userUpdate.credit}</p>
 		        <br>
 				<button type="submit">Enregistrer</button>
-				<a href="<%=request.getContextPath()%>/suppressionCompte?id=$(utilisateur.numero)"><button>Supprimer mon compte</button></a>
+				<button type="button"><a href="<%=request.getContextPath()%>/suppressionCompte?id=${userUpdate.numero}">Supprimer mon compte</a></button>
 		      </div>
 		            
 	  		</form>

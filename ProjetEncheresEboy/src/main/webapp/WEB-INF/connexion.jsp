@@ -20,7 +20,7 @@ color: red;}
   </head>
 
   <body>
-  	 <h1>Eboy-Enchères</h1>
+  	 <h1>ENI-Enchères</h1>
  
 <h3>${messageUser}</h3>
   	<form action="<%=request.getContextPath() %>/ServletConnexion" method="POST">

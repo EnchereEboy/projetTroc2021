@@ -16,7 +16,7 @@
 
 </head>
 <body class="container">
-	<h2>ENI-Encheres</h2>
+	<h2>ENI-Enchères</h2>
 	<br>
 	<h1 class="jumbotron">Détail vente</h1>
 

@@ -17,7 +17,7 @@ table {
 </head>
 
 <body>
-	<h1>Eboy-Enchères</h1>
+	<h1>ENI-Enchères</h1>
 
 	<form action="<%=request.getContextPath()%>/ServletInscription"
 		method="POST">

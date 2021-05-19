@@ -9,24 +9,23 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import fr.eni.eboy.bll.ArticleManager;
 import fr.eni.eboy.bll.CategorieManager;
-import fr.eni.eboy.bll.EnchereManager;
 import fr.eni.eboy.bo.Article;
 import fr.eni.eboy.bo.Categorie;
-import fr.eni.eboy.bo.Enchere;
 
 /**
  * Servlet implementation class ServletAcceuil
  */
-@WebServlet(urlPatterns ={"/index", "/acceuil", "/encheres"})
-public class ServletAcceuil extends HttpServlet {
+@WebServlet(urlPatterns ={"/index", "/accueil", "/encheres"})
+public class ServletAccueil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor. 
      */
-    public ServletAcceuil() {
+    public ServletAccueil() {
         // TODO Auto-generated constructor stub
     }
 
@@ -74,6 +73,7 @@ public class ServletAcceuil extends HttpServlet {
 		//fait la recherche de toute les vente en cours
 		//List<Article> listeArticlesAcceuil = new ArticleManager().selectAllEnCours();
 		
+		//--------DEBUG
 		//fait la recherche de toute les ventes(en cours ou non) de l'utilisateur connecté et selon la recherche et catégorie
 		Integer idUtilisateur = 1; //num  utilisateur bogoss
 		Categorie categorieRecherchee = new CategorieManager().selectById(Integer.parseInt(categorieParam));
@@ -84,7 +84,6 @@ public class ServletAcceuil extends HttpServlet {
 		
 		request.setAttribute("articles", listeArticlesAcceuil);
 		
-		//--------DEBUG
 		//------ creation d'objet pour debug
 //		ArticleDaoJdbcImpl aDao = new ArticleDaoJdbcImpl();
 //		listeArticlesAcceuil = aDao.selectAllEnCours();

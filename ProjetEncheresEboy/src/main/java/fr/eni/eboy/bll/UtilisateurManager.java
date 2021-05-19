@@ -31,6 +31,10 @@ public class UtilisateurManager {
 	}
 	
 	public void modificationUtilisateur(Utilisateur utilisateur) {
-		this.utilisateurDao.modifierUtilisateur(utilisateur);
+		this.utilisateurDao.update(utilisateur);
+	}
+	
+	public int supprimerUtilisateur(Integer numero) {
+		return this.utilisateurDao.delete(numero);
 	}
 }
