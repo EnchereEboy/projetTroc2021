@@ -32,11 +32,7 @@ public class ServletAccueil extends HttpServlet {
 		request.setAttribute("idUser", sessionEncheres.getAttribute("idUser"));
 		List<Article> listeArticlesAcceuil = new ArticleManager().selectAllEnCours();
 		request.setAttribute("articles", listeArticlesAcceuil);
-//		
-//		System.out.println("Listes des articles affiché :" + listeArticlesAcceuil.toString());
-//		System.out.println("Is empty :"+ listeArticlesAcceuil.isEmpty());
-//		System.out.println("Size =" + listeArticlesAcceuil.size());
-		//System.out.println(listeArticlesAcceuil.listIterator());
+
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
 		rd.forward(request, response);
 	
