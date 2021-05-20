@@ -15,8 +15,7 @@
 	<br>
 <c:choose>
     <c:when test="${empty idUser}">
-        <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/ServletConnexion")%>">S'inscrire
-			- Se connecter</a>
+        <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/ServletConnexion")%>">S'inscrire - Se connecter</a>
 		<br> 
     </c:when>
     <c:otherwise>
@@ -60,13 +59,23 @@
 				<div class="col-md-4">
 					<div class="card">
 						<div class="card-body">
-							<h3>${a.nom }<a href=' <c:url value=" ./enchere?id=${a.numero } "/> '> ${a.nom }</a></h3>
+						    <c:if test="${!empty idUser}">
+							   <h3><a href=' <c:url value=" ./enchere?id=${a.numero } "/> '> ${a.nom }</a></h3>
+							</c:if>
+							 <c:if test="${empty idUser}">
+							   <h3>${a.nom }</h3>
+							</c:if>
 							<br> <br>
 							<p>Prix : ${a.prixVente } points</p>
 							<br>
 							<p>Fin de l'enchère : ${a.dateFinEncheres }</p>
 							<br> <br>
-							<p>Vendeur : <a href=' <c:url value=" ./profil?id=${a.utilisateur.numero } "/> '> ${a.utilisateur.pseudo}</a> </p>
+							<c:if test="${!empty idUser}">
+							 <p>Vendeur : <a href=' <c:url value=" ./profil?id=${a.utilisateur.numero } "/> '> ${a.utilisateur.pseudo}</a> </p>
+							</c:if>
+							<c:if test="${empty idUser}">
+							  <p>Vendeur :  ${a.utilisateur.pseudo} </p>
+							</c:if>
 						</div>
 					</div>
 

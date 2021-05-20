@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import fr.eni.eboy.bll.ArticleManager;
 import fr.eni.eboy.bll.CategorieManager;
@@ -22,25 +23,21 @@ import fr.eni.eboy.bo.Categorie;
 public class ServletAccueil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * Default constructor. 
-     */
-    public ServletAccueil() {
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession sessionEncheres = request.getSession();
+		request.setAttribute("idUser", sessionEncheres.getAttribute("idUser"));
 
 		
 		List<Article> listeArticlesAcceuil = new ArticleManager().selectAllEnCours();
 		request.setAttribute("articles", listeArticlesAcceuil);
-		
-		System.out.println("Listes des articles affiché :" + listeArticlesAcceuil.toString());
-		System.out.println("Is empty :"+ listeArticlesAcceuil.isEmpty());
-		System.out.println("Size =" + listeArticlesAcceuil.size());
+//		
+//		System.out.println("Listes des articles affiché :" + listeArticlesAcceuil.toString());
+//		System.out.println("Is empty :"+ listeArticlesAcceuil.isEmpty());
+//		System.out.println("Size =" + listeArticlesAcceuil.size());
 		//System.out.println(listeArticlesAcceuil.listIterator());
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
 		rd.forward(request, response);

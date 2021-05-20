@@ -98,8 +98,9 @@ public class ServletEnchere extends HttpServlet {
 			EnchereManager validateEncher= new EnchereManager();
 			
               validateEncher.validationEnchere(newEnchere); 
-			RequestDispatcher rd = request.getRequestDispatcher("/index");
-			rd.forward(request, response);
+//			RequestDispatcher rd = request.getRequestDispatcher("/index");
+//			rd.forward(request, response);
+			response.sendRedirect("/ProjetEncheresEboy/encheres");
 		}
 		
 		//doGet(request, response);
