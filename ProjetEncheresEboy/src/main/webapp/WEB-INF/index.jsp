@@ -1,18 +1,14 @@
- 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Acceuil EBoy</title>
-
 <!-- Bootstrap core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
 <!-- Custom styles for this template -->
 <link href="css/4-col-portfolio.css" rel="stylesheet">
-
-
 </head>
+
 <body class="container">
 	
 	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>

@@ -6,15 +6,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Enchere en cours EBoy</title>
-
 <!-- Bootstrap core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
 <!-- Custom styles for this template -->
 <link href="css/4-col-portfolio.css" rel="stylesheet">
-
-
 </head>
+
 <body class="container">
 	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
 	<br>
@@ -57,40 +54,41 @@
 			</div>
 		</c:forEach>
 	</c:if>
-			<div id="a" class="row" >
-				<div class="card">
-					<div class="card-body">
-						<h3>${article.nom }</h3>
-						<br> <br>
-						<div>
-							<p>Description : ${article.description}</p>
-						</div>
-						<!-- Div du bloc Description et de la boite de texte -->
-						<br> <br>
-						<p>Catégorie : ${article.categorie.libelle }</p>
-						<br> <br>
-						<p>Meilleur offre : ${article.prixVente } pts par ${enchere.utilisateur.pseudo }</p>
-						<br> <br>
-						<p>Mise à prix : ${article.prixInitial } points</p>
-						<br> <br>
-						<p>Fin de l'enchère : ${article.dateFinEncheres }</p>
-						<br> <br>
-						<div>
-							<!-- Div Bloc de l'adresse de retrait -->
-							<p>Retrait : ${article.utilisateur.ville }
-						</div>
-						<br> <br>
-						<p>Vendeur : ${article.utilisateur.pseudo }</p>
-						<br> <br>
-						<p>Ma proposition :</p>
-						<form action="" method="POST"></form>
-						<input type="number" id="enchereProposition"
-							name="enchereProposition"> <input type="submit"
-							name="enchereProposition" value="Enchérir">
-					</div>
+	<div id="a" class="row">
+		<div class="card">
+			<div class="card-body">
+				<h3>${article.nom }</h3>
+				<br> <br>
+				<div>
+					<p>Description : ${article.description}</p>
 				</div>
+				<!-- Div du bloc Description et de la boite de texte -->
+				<br> <br>
+				<p>Catégorie : ${article.categorie.libelle }</p>
+				<br> <br>
+				<p>Meilleur offre : ${article.prixVente } pts par
+					${enchere.utilisateur.pseudo }</p>
+				<br> <br>
+				<p>Mise à prix : ${article.prixInitial } points</p>
+				<br> <br>
+				<p>Fin de l'enchère : ${article.dateFinEncheres }</p>
+				<br> <br>
+				<div>
+					<!-- Div Bloc de l'adresse de retrait -->
+					<p>Retrait : ${article.utilisateur.ville }
+				</div>
+				<br> <br>
+				<p>Vendeur : ${article.utilisateur.pseudo }</p>
+				<br> <br>
+				<p>Ma proposition :</p>
+				<form action="" method="POST"></form>
+				<input type="number" id="enchereProposition"
+					name="enchereProposition"> <input type="submit"
+					name="enchereProposition" value="Enchérir">
 			</div>
-	
-	
+		</div>
+	</div>
+
+
 </body>
 </html>
