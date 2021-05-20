@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import fr.eni.eboy.bo.Utilisateur;
+import fr.eni.eboy.bo.Utilisateur; 
 
 /**
  * Classe contenant les methodes pour acceder à la table Utilisateurs. 
@@ -27,7 +27,9 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 			+ " AND (SELECT COUNT(*) FROM Utilisateurs u RIGHT JOIN  Encheres e"
 			+ " ON u.no_utilisateur = e.no_utilisateur"
 			+ " WHERE e.no_utilisateur=?)=0";
-		
+	private final static String CREDIT_USER=" update utilisateurs set credit=credit+(select montant_enchere from encheres  where montant_enchere in ( select max(montant_enchere) from ENCHERES  where no_article=?)  )\r\n"
+			+ "  where no_utilisateur in( select no_utilisateur from encheres   where montant_enchere in (  select max(montant_enchere) from ENCHERES   where no_article=?)  )";	
+    private final static String DEBIT_USER="update utilisateurs set credit=credit-?  where no_utilisateur=?";
 	@Override
 	public Utilisateur insertConnection(String pseudoOuEmail, String password) {
 		Utilisateur utilisateur = new Utilisateur(); 
@@ -148,6 +150,43 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 		}		
 	}
 	
+	@Override
+	public int debiterUser (int idUser, int proposalAmount) {
+		//on annule l'auto-commit (par défaut true avec JDBC)
+		int result=0;
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pStmt = cnx.prepareStatement(DEBIT_USER);
+			pStmt.setInt(1, proposalAmount);
+			pStmt.setInt(2, idUser);
+			 
+			  result=pStmt.executeUpdate(); 
+			 
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		  
+		
+		return result;
+	}
+	
+	@Override
+   public int crediterUser(int idarticle) {
+	   int result=0;
+	   try(Connection cnx = ConnectionProvider.getConnection()) {
+		   PreparedStatement pStmt = cnx.prepareStatement(CREDIT_USER);
+			 pStmt.setInt(1, idarticle);
+			 pStmt.setInt(2, idarticle);
+			 
+			 result=pStmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	   return result;
+   }
+   
+   
+   
+   
 	@Override
 	public int delete(Integer numero) {
 		int retour = 0;

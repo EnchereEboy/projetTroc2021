@@ -15,5 +15,8 @@ public interface UtilisateurDao {
 	public void update(Utilisateur utilisateur);
 	
 	public int delete(Integer numero);
-
+	
+	public int crediterUser(int idarticle);
+	
+	public int debiterUser (int idUser, int proposalAmount);
 }

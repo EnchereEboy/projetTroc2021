@@ -45,10 +45,11 @@
 						<p>Vendeur : ${a.utilisateur.pseudo }</p>
 						<br> <br>
 						<p>Ma proposition :</p>
-						<form action="" method="POST"></form>
-						<input type="number" id="enchereProposition"
-							name="enchereProposition"> <input type="submit"
-							name="enchereProposition">
+						<form method="POST" action="<%=request.getContextPath()%>/enchere">
+							<input type="number" id="enchereProposition"
+								name="enchereProposition"  min="${a.prixVente }"> 
+							<input type="submit"  name="enchereProposition">
+						 </form>
 					</div>
 				</div>
 			</div>
@@ -81,10 +82,11 @@
 				<p>Vendeur : ${article.utilisateur.pseudo }</p>
 				<br> <br>
 				<p>Ma proposition :</p>
-				<form action="" method="POST"></form>
+				<form method="POST" action="<%=request.getContextPath()%>/enchere">
+				
 				<input type="number" id="enchereProposition"
 					name="enchereProposition"> <input type="submit"
-					name="enchereProposition" value="Enchérir">
+					name="enchereProposition" value="Enchérir"></form>
 			</div>
 		</div>
 	</div>

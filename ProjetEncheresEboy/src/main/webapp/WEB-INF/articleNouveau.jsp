@@ -50,7 +50,7 @@
 				<tr>
 					<td>Mise à prix :</td>
 					<td><input type="number" id="miseaprix" name="miseaprix"
-						min="100" max="10000" required></td>
+						min="100" max="100000" required></td>
 				</tr>
 				<tr>
 					<td>Début de l'enchere :</td>

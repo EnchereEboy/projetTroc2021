@@ -37,4 +37,15 @@ public class UtilisateurManager {
 	public int supprimerUtilisateur(Integer numero) {
 		return this.utilisateurDao.delete(numero);
 	}
+	
+	public int debiter(int idUser, int montantPropose) {
+		return this.utilisateurDao.debiterUser(idUser, montantPropose);
+	}
+	
+	
+	public int crediter (int idArticle) {
+		return utilisateurDao.crediterUser(idArticle);
+	}
+	
+	
 }
