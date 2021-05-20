@@ -16,7 +16,7 @@
 	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
 	<br>
 	<h1 class="jumbotron">Détail vente</h1>
-
+         <h5><center>${message}</center></h5>
 	<c:if test="${!empty article} ">
 		<c:forEach var="a" items="${article }">
 			<div id="a" class="row">
