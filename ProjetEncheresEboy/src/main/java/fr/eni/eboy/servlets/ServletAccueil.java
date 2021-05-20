@@ -30,8 +30,6 @@ public class ServletAccueil extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession sessionEncheres = request.getSession();
 		request.setAttribute("idUser", sessionEncheres.getAttribute("idUser"));
-
-		
 		List<Article> listeArticlesAcceuil = new ArticleManager().selectAllEnCours();
 		request.setAttribute("articles", listeArticlesAcceuil);
 //		
