@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>eboy - Nouvel article</title>
+<title>eboy - Vente article</title>
 <!-- Bootstrap core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="css/4-col-portfolio.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet" media="all">
+<script src="vendor/jScript.js"></script>
 </head>
-
 <body class="container">
-	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
+	<a
+		href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
 	<br>
-	<h1 class="jumbotron">Nouvelle vente</h1>
+	<h1 class="jumbotron">Vente article</h1>
 	<div class="jumbotron">
 		<form action="<%=request.getContextPath()%>/NouvelleVente"
-			method="POST">
+			method="POST" onsubmit="return verifDate()">
 			<table id="MaTable" class="tabcenter">
-				<tbody>
+				<tbody> 
 				<tr>
 					<td rowspan="9"><img class="fit-picture"
 						src="images/NoImage.png" alt="Photo de l'article"></td>
@@ -28,9 +28,10 @@
 				</tr>
 				<tr>
 					<td>Description</td>
-					<td><textarea name="description" minlength="10"
-							maxlength="250" placeholder="Description de l'article." rows="5"
-							cols="30" required></textarea></td>
+					<td><textarea name="description" id="description"
+							minlength="10" maxlength="250"
+							placeholder="Description de l'article." rows="5" cols="30"
+							required></textarea></td>
 				</tr>
 				<tr>
 					<td>Categorie :</td>
@@ -53,13 +54,22 @@
 				</tr>
 				<tr>
 					<td>Début de l'enchere :</td>
-					<td><input type="datetime-local" id="datedebutenchere"
-						name="datedebutenchere" value="" min="2021" required></td>
+					<td>
+						<!-- 						      <input type="datetime-local" id="datedebutenchere" -->
+						<!-- 								   name="datedebutenchere" value="" --> <!-- 								   min="2021" required > -->
+						<input id="datedebutenchere" type="date" name="datedebutenchere">
+						<input type="time" name="heuredebutenchere" id="heuredebutenchere">
+					</td>
 				</tr>
 				<tr>
 					<td>Fin de l'enchere :</td>
-					<td><input type="datetime-local" id="datefinenchere"
-						name="datefinenchere" value="" min="2021" required></td>
+					<td>
+						<!-- 						      <input type="datetime-local" id="datefinenchere" -->
+						<!-- 								   name="datefinenchere" value="" --> <!-- 								   min="2021" required > -->
+						<input id="datefinenchere" type="date" name="datefinenchere"><input
+						type="time" name="heurefinenchere" id="heurefinenchere">
+
+					</td>
 				</tr>
 				<tr>
 					<!-- <td  ></td> -->
@@ -74,7 +84,7 @@
 								</tr>
 								<tr>
 									<td><label>Code postal</label></td>
-									<td><input type="text" name="codepoastal"
+									<td><input type="text" name="codepostal"
 										value="${user.codePostal}" placeholder="Votre code postal" /></td>
 								</tr>
 								<tr>
@@ -94,6 +104,7 @@
 				</tr>
 				</tbody>
 			</table>
+
 		</form>
 	</div>
 </body>

@@ -31,7 +31,7 @@ public class Retrait implements Serializable {
 		setVille(ville);
 	}
 	
-	public Retrait( String rue, String code_postale, String ville) {
+	public Retrait( String rue, String codePostal, String ville) {
 		this(); 
 		setRue(rue);
 		setCodePostal(codePostal);

@@ -76,7 +76,7 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 			+ PRIX_VENTE_COL+","
 			+ NUM_UTIL_COL +","
 			+ NUM_CAT_COL + ")" 
-			+ "VALUES(? ,?, ?, ?, ?, ?, ?, ?,?)"; 
+			+ "VALUES(? ,?, ?, ?, ?, ?, ?, ?)"; 
 
 	
 	
@@ -157,6 +157,7 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 					 if(articleAAjouter.getLieuRetrait().getRue()!=null) {
 						 System.out.println("ajout de l'adresse");
 						 PreparedStatement pStmtRetrait=cnx.prepareStatement(REQ_INSERT_RETRAIT);
+						 System.out.println("valeur code postal"+articleAAjouter.getLieuRetrait().getCodePostal());
 						 pStmtRetrait.setInt(1, articleAAjouter.getNumero());
 						 pStmtRetrait.setString(2, articleAAjouter.getLieuRetrait().getRue());
 						 pStmtRetrait.setString(3, articleAAjouter.getLieuRetrait().getCodePostal());
