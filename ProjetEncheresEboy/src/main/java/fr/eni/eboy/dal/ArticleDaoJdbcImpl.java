@@ -76,7 +76,7 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 			+ PRIX_VENTE_COL+","
 			+ NUM_UTIL_COL +","
 			+ NUM_CAT_COL + ")" 
-			+ "VALUES(? ,?, ?, ?, ?, ?, ?, ?,?)"; 
+			+ "VALUES(? ,?, ?, ?, ?, ?, ?, ?)"; 
 
 	
 	

@@ -25,8 +25,8 @@
     </c:when>
     <c:otherwise>
          <br>  
-		 <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/enchere")%>">Encheres</a>  
-		 <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/NouvelleVente")%>">Vendre un article</a>  
+		 <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/enchere")%>">Encheres</a>    
+		  <a href="<%=request.getContextPath()%>/vente?id=${idUser}">Vendre un article</a> 
 		 <a href="<%=request.getContextPath()%>/monProfil?id=${idUser}">Mon profil</a>  
 		 
 		 <a href="<%=response.encodeRedirectURL(request.getContextPath() + "/ServletDisconnect")%>">Deconnexion</a>	   
