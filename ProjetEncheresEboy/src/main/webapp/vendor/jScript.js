@@ -1,5 +1,5 @@
- function verifDate(){
-	//recuperation des champs 
+  function verifDate(){
+	 
 	var reggie = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/;
 	var nomArticle = document.getElementById("article").value;
 	var descriptionArticle = document.getElementById("description").value;
@@ -8,7 +8,7 @@
 	var datedebutenchereArticle = document.getElementById("datedebutenchere").value;
 	var heuredebutenchereArticle = document.getElementById("heuredebutenchere").value;
 	var debutenchere=datedebutenchereArticle+" "+heuredebutenchereArticle;
- //recuperation de la date de fin de l'enchere'	 
+   
       var datefinenchereArticle = document.getElementById("datefinenchere").value;
       var heurefinenchereArticle = document.getElementById("heurefinenchere").value;
       var finenchere=datefinenchereArticle+" "+heurefinenchereArticle;
@@ -32,7 +32,7 @@ var dateheurefinenchere = new Date(
     ); 
 
 
-//date actuelle 
+ 
 var currentDate = new Date();
 	if(currentDate.getTime() > dateheuredebutenchere.getTime() ){
 		alert("Le debut des encheres doit être superieur à la date de today");

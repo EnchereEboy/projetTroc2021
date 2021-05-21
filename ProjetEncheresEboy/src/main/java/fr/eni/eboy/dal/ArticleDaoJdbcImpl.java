@@ -13,8 +13,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.eni.eboy.bll.EnchereManager;
+import fr.eni.eboy.bll.UtilisateurManager;
 import fr.eni.eboy.bo.Article;
 import fr.eni.eboy.bo.Categorie;
+import fr.eni.eboy.bo.Enchere;
 import fr.eni.eboy.bo.Utilisateur;
 
 /**
@@ -76,13 +79,14 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 			+ PRIX_VENTE_COL+","
 			+ NUM_UTIL_COL +","
 			+ NUM_CAT_COL + ")" 
-			+ "VALUES(? ,?, ?, ?, ?, ?, ?, ?)"; 
+			+ "VALUES(? ,?, ?, ?, ?, ?, ?, ?,?)"; 
 
 	
 	
 	private static final String REQ_SELECT_ALL_EN_COURS="SELECT *"
 			+"FROM ARTICLES_VENDUS "
-			+"WHERE etat_vente=0 ";
+			+"WHERE etat_vente=0 "
+			+ "AND " + DATE_DEBUT_COL +"< ? ";
 
 	private static final String REQ_SELECT_ALL="SELECT * "
 			+"FROM ARTICLES_VENDUS ";
@@ -106,17 +110,34 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 //			+ "no_categorie)" 
 //			+ "VALUES(? ,?, ?, ?, ?, ?, ?, ?)"; 
 	private static final String REQ_INSERT_RETRAIT="INSERT INTO RETRAITS (no_article , rue , code_postal , ville) VALUES(?, ?, ?, ?)";
-	private static final String REQ_SELECT_BY_CAT_AND_NAME_AND_USER = "SELECT * "
+	private static final String REQ_SELECT_BY_CAT_AND_NAME_AND_USER_EN_COURS = "SELECT * "
 			+ "FROM ARTICLES_VENDUS "
 			+ "WHERE "
 			+ NUM_CAT_COL + "=? "
 			+ "AND " + NUM_UTIL_COL +"=? "
+			+ "AND ? BETWEEN "+ DATE_DEBUT_COL+ " AND "+DATE_FIN_COL+" "
+			+ "AND "+ETAT_VENTE_COL+"=0 "
 			+ "AND LOWER("+ NOM_COL +") LIKE  ?";
 	private static final String REQ_SELECT_BY_CAT_AND_NAME_EN_COURS = "SELECT * "
 			+ "FROM ARTICLES_VENDUS "
 			+ "WHERE "
 			+ NUM_CAT_COL + "=? "
 			+ "AND " + ETAT_VENTE_COL +"=0 "
+			+ "AND " + DATE_DEBUT_COL +"< ? "
+			+ "AND LOWER("+ NOM_COL +") LIKE  ?";
+	private static final String REQ_SELECT_BY_CAT_AND_NAME_AND_USER_NON_DEBUTEE = "SELECT * "
+			+ "FROM ARTICLES_VENDUS "
+			+ "WHERE "
+			+ NUM_CAT_COL + "=? "
+			+ "AND " + NUM_UTIL_COL +"=? "
+			+ "AND " + DATE_DEBUT_COL +"> ? "
+			+ "AND LOWER("+ NOM_COL +") LIKE  ?";
+	private static final String REQ_SELECT_BY_CAT_AND_NAME_AND_USER_TERMINEE = "SELECT * "
+			+ "FROM ARTICLES_VENDUS "
+			+ "WHERE "
+			+ NUM_CAT_COL + "=? "
+			+ "AND " + NUM_UTIL_COL +"=? "
+			+ "AND " + ETAT_VENTE_COL +"=1 "
 			+ "AND LOWER("+ NOM_COL +") LIKE  ?";
 	
 //	private static final String REQ_SELECTBYID="select nom_article,description,date_debut_encheres,"
@@ -157,7 +178,6 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 					 if(articleAAjouter.getLieuRetrait().getRue()!=null) {
 						 System.out.println("ajout de l'adresse");
 						 PreparedStatement pStmtRetrait=cnx.prepareStatement(REQ_INSERT_RETRAIT);
-						 System.out.println("valeur code postal"+articleAAjouter.getLieuRetrait().getCodePostal());
 						 pStmtRetrait.setInt(1, articleAAjouter.getNumero());
 						 pStmtRetrait.setString(2, articleAAjouter.getLieuRetrait().getRue());
 						 pStmtRetrait.setString(3, articleAAjouter.getLieuRetrait().getCodePostal());
@@ -219,8 +239,11 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 	public List<Article> selectAllEnCours() {
 		List<Article> listeArticlesARetourner = new ArrayList<Article>();
 		try (Connection cnx =ConnectionProvider.getConnection()){
-			Statement stmt= cnx.createStatement();
-			ResultSet rs = stmt.executeQuery(REQ_SELECT_ALL_EN_COURS);
+			PreparedStatement pStmt=cnx.prepareStatement(REQ_SELECT_ALL_EN_COURS);
+			pStmt.setString(1, LocalDateTime.now().format(formatJourMoisAnneeHeureMinute));
+			ResultSet rs = pStmt.executeQuery();
+//			Statement stmt= cnx.createStatement();
+//			ResultSet rs = stmt.executeQuery(REQ_SELECT_ALL_EN_COURS);
 			while(rs.next()) {
 				listeArticlesARetourner.add(map(rs));
 			}
@@ -258,25 +281,7 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 		try (Connection cnx =ConnectionProvider.getConnection()){
 			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_EN_COURS);
 			pStmt.setInt(1, cat.getNumero());
-			pStmt.setString(2, "%" + recherche.toLowerCase().trim() + "%");
-			ResultSet rs = pStmt.executeQuery();
-			while(rs.next()) {
-				listeArticlesARetourner.add(map(rs));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return listeArticlesARetourner;
-	}
-	
-	@Override
-	public List<Article> selectByCategorieAndNameAndUtilisateur(Categorie cat, String recherche, Integer idUtilisateur) {
-
-		List<Article> listeArticlesARetourner = new ArrayList<Article>();
-		try (Connection cnx =ConnectionProvider.getConnection()){
-			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_AND_USER);
-			pStmt.setInt(1, cat.getNumero());
-			pStmt.setInt(2, idUtilisateur);
+			pStmt.setString(2, LocalDateTime.now().format(formatJourMoisAnneeHeureMinute));
 			pStmt.setString(3, "%" + recherche.toLowerCase().trim() + "%");
 			ResultSet rs = pStmt.executeQuery();
 			while(rs.next()) {
@@ -287,14 +292,53 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 		}
 		return listeArticlesARetourner;
 	}
+	
+	@Override
+	public List<Article> selectByEnchereAndCategorieAndNameAndUtilisateur(Categorie cat, String recherche, Integer idUtilisateur) {
+
+		//Debug :
+		System.out.println("debut de la fonction dans l'article");
+		
+		List<Article> listeArticlesARetourner = new ArrayList<Article>();
+		List<Enchere> listeEnchereUtilisateur = new ArrayList<Enchere>();
+		System.out.println("creation des listes enchere et article");
+		listeEnchereUtilisateur= new EnchereManager().selectByUtilisateurAcheteurByCatByName(cat, new UtilisateurManager().retournerUtilisateurParId(idUtilisateur), recherche);
+		System.out.println("la liste enchere a été remplie");
+		System.out.println("taille de la liste Enchere:"+ listeEnchereUtilisateur.size());
+		Article a= new Article();
+		for (Enchere enchere : listeEnchereUtilisateur) {
+			a=enchere.getArticle();
+			if (!(listeArticlesARetourner.contains(a))) {
+				listeArticlesARetourner.add(a);
+			}
+		}
+		System.out.println("taille de la liste Article:"+ listeArticlesARetourner.size());
+		return listeArticlesARetourner;
+	}
 
 	
 
 	@Override
-	public List<Article> selectByCategorieAndNameAndUtilisateurGagnee(Categorie cat, String recherche,
+	public List<Article> selectByEnchereGagneeAndCategorieAndNameAndUtilisateur(Categorie cat, String recherche,
 			Integer idUtilisateur) {
-		// TODO Auto-generated method stub
-		return null;
+		//Debug :
+				System.out.println("debut de la fonction dans l'article");
+				
+				List<Article> listeArticlesARetourner = new ArrayList<Article>();
+				List<Enchere> listeEnchereUtilisateur = new ArrayList<Enchere>();
+				System.out.println("creation des listes enchere et article");
+				listeEnchereUtilisateur= new EnchereManager().selectByUtilisateurAcheteurGagneByCatByName(cat, new UtilisateurManager().retournerUtilisateurParId(idUtilisateur), recherche);
+				System.out.println("la liste enchere a été remplie");
+				System.out.println("taille de la liste Enchere:"+ listeEnchereUtilisateur.size());
+				Article a= new Article();
+				for (Enchere enchere : listeEnchereUtilisateur) {
+					a=enchere.getArticle();
+					if (!(listeArticlesARetourner.contains(a))) {
+						listeArticlesARetourner.add(a);
+					}
+				}
+				System.out.println("taille de la liste Article:"+ listeArticlesARetourner.size());
+				return listeArticlesARetourner;
 	}
 
 	@Override
@@ -381,6 +425,80 @@ public class ArticleDaoJdbcImpl implements ArticleDao {
 		Categorie categorie = DaoFactory.getCategorieDao().selectById(idCategorie);
 		//java.sql.Date.valueOf(articleAAjouter.getDate_debut_encheres().format(formatJourMoisAnneeHeureMinute))
 		return new Article(id, nom, description, dateDebutEncheres, dateFinEncheres, prixInitial, prixVente, etatVente, utilisateur, categorie);
+	}
+
+
+
+
+	/**
+	* {@inheritDoc}
+	*/
+	@Override
+	public List<Article> selectByCategorieAndNameAndUtilisateurEnCours(Categorie cat, String recherche,
+			Integer idUtilisateur) {
+
+		List<Article> listeArticlesARetourner = new ArrayList<Article>();
+		try (Connection cnx =ConnectionProvider.getConnection()){
+			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_AND_USER_EN_COURS);
+			pStmt.setInt(1, cat.getNumero());
+			pStmt.setInt(2, idUtilisateur);
+			pStmt.setString(3, LocalDateTime.now().format(formatJourMoisAnneeHeureMinute));
+			pStmt.setString(4, "%" + recherche.toLowerCase().trim() + "%");
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()) {
+				listeArticlesARetourner.add(map(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listeArticlesARetourner;
+	}
+
+	/**
+	* {@inheritDoc}
+	*/
+	@Override
+	public List<Article> selectByCategorieAndNameAndUtilisateurNonDebutee(Categorie cat, String recherche,
+			Integer idUtilisateur) {
+
+		List<Article> listeArticlesARetourner = new ArrayList<Article>();
+		try (Connection cnx =ConnectionProvider.getConnection()){
+			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_AND_USER_NON_DEBUTEE);
+			pStmt.setInt(1, cat.getNumero());
+			pStmt.setInt(2, idUtilisateur);
+			pStmt.setString(3, LocalDateTime.now().format(formatJourMoisAnneeHeureMinute));
+			pStmt.setString(4, "%" + recherche.toLowerCase().trim() + "%");
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()) {
+				listeArticlesARetourner.add(map(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listeArticlesARetourner;
+	}
+
+	/**
+	* {@inheritDoc}
+	*/
+	@Override
+	public List<Article> selectByCategorieAndNameAndUtilisateurTerminee(Categorie cat, String recherche,
+			Integer idUtilisateur) {
+
+		List<Article> listeArticlesARetourner = new ArrayList<Article>();
+		try (Connection cnx =ConnectionProvider.getConnection()){
+			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_AND_USER_TERMINEE);
+			pStmt.setInt(1, cat.getNumero());
+			pStmt.setInt(2, idUtilisateur);
+			pStmt.setString(3, "%" + recherche.toLowerCase().trim() + "%");
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()) {
+				listeArticlesARetourner.add(map(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listeArticlesARetourner;
 	}
 	
 }

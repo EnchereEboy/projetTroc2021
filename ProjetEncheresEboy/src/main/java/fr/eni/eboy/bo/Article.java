@@ -248,6 +248,26 @@ public class Article implements Serializable{
 		this.listeEncheres = listeEncheres;
 	}
 
+	
+
+	/**
+	* {@inheritDoc}
+	*/
+	@Override
+	public boolean equals(Object other) {
+		boolean retourEgalité= false;
+		if (other == null) {
+			retourEgalité = false;
+		}
+		if(this.getClass() != other.getClass()) {
+			retourEgalité = false;
+		}
+		if(this.getNumero() == ((Article)other).getNumero()) {
+			retourEgalité = true;
+		}
+		return retourEgalité;
+	}
+
 
 	@Override
 	public String toString() {

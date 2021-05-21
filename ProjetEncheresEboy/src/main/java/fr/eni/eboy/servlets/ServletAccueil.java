@@ -1,6 +1,7 @@
 package fr.eni.eboy.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -12,9 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import fr.eni.eboy.bll.ArticleManager;
-import fr.eni.eboy.bll.CategorieManager;
+import fr.eni.eboy.bll.CategorieManager; 
+import fr.eni.eboy.bll.UtilisateurManager;
 import fr.eni.eboy.bo.Article;
-import fr.eni.eboy.bo.Categorie;
+import fr.eni.eboy.bo.Categorie; 
 
 /**
  * Servlet implementation class ServletAcceuil
@@ -23,16 +25,25 @@ import fr.eni.eboy.bo.Categorie;
 public class ServletAccueil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+    /**
+     * Default constructor. 
+     */
+    public ServletAccueil() {
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		HttpSession sessionEncheres = request.getSession();
 		request.setAttribute("idUser", sessionEncheres.getAttribute("idUser"));
-		List<Article> listeArticlesAcceuil = new ArticleManager().selectAllEnCours();
-		request.setAttribute("articles", listeArticlesAcceuil);
-
+		List<Article> listeArticlesAccueil = new ArticleManager().selectAllEnCours();
+		request.setAttribute("articles", listeArticlesAccueil);
+	 
+		System.out.println("Is empty :"+ listeArticlesAccueil.isEmpty());
+		System.out.println("Size =" + listeArticlesAccueil.size());
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
 		rd.forward(request, response);
 	
@@ -46,87 +57,83 @@ public class ServletAccueil extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		doGet(request, response);
-//		String testBDD ="2021-01-30 10:30:00.0";
-//		LocalDateTime dateTestBDD = LocalDateTime.parse(testBDD, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
-//		System.out.println(dateTestBDD);
-//		System.out.println(dateTestBDD.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
-//		System.out.println(dateTestBDD.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS")));
-		
-//		
-//		LocalDateTime dateTest = LocalDateTime.parse("2021-01-30T10:30:00.0");
-//		System.out.println(dateTest);
+ 
 
+		//Gestion de session
+		HttpSession sessionEncheres = request.getSession();
+		if( sessionEncheres.getAttribute("idUser")==null) { 
+			doGet(request, response);
+			
+		}
+		
+		Integer idUser = (Integer) sessionEncheres.getAttribute("idUser");
 		
 		String texteRechercheParam = request.getParameter("recherche");
 		String categorieParam = request.getParameter("categorie");
-		
-		//fait la recherche de toute les vente en cours
-		//List<Article> listeArticlesAcceuil = new ArticleManager().selectAllEnCours();
-		
-		//--------DEBUG
-		//fait la recherche de toute les ventes(en cours ou non) de l'utilisateur connecté et selon la recherche et catégorie
-		Integer idUtilisateur = 1; //num  utilisateur bogoss
-		
+//		if (categorieParam==null) {
+//			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
+//			rd.forward(request, response);
+//		}
+		//Radio du choix utilisateur
+		String ChoixOptionParam = request.getParameter("optionConnectee");
+		boolean ChoixAchat =false;
+		boolean ChoixVente =false;
+		//Checkboxes achats
+		boolean checkEnchereOuverte =Boolean.parseBoolean(request.getParameter("enchereOuverte"));
+		boolean checkEnchereUtilisateur =Boolean.parseBoolean( request.getParameter("enchereUtilisateur"));
+		boolean checkEnchereGagnee = Boolean.parseBoolean(request.getParameter("enchereGagnee"));
+		//Cheboxes ventes
+		boolean checkVenteOuverte = Boolean.parseBoolean(request.getParameter("ventesOuverte"));
+		boolean checkVenteNonDebutee = Boolean.parseBoolean(request.getParameter("venteNonDebutee"));
+		boolean checkVenteTerminee = Boolean.parseBoolean(request.getParameter("venteTerminee"));
+
+		System.out.println("checkEnchereOuverte :"+checkEnchereOuverte);
+		System.out.println("checkEnchereUtilisateur :"+checkEnchereUtilisateur);
+		System.out.println("checkEnchereGagnee :"+checkEnchereGagnee);
+		System.out.println("checkVenteOuverte :"+checkVenteOuverte);
+		System.out.println("checkVenteNonDebutee :"+checkVenteNonDebutee);
+		System.out.println("checkVenteTerminee :"+checkVenteTerminee);
+		String achats = "achats";
+		//String ventes = "ventes"; Debug si test ventes
+		if (ChoixOptionParam != null) {
+			if (ChoixOptionParam.equals(achats)) {
+				ChoixAchat = true;
+			} else {
+				ChoixVente = true;
+			}
+		}
+		System.out.println("Choixoption param : "+ChoixOptionParam);
+		System.out.println("ChoixAchat param : "+ChoixAchat);
+		System.out.println("ChoixVente param : "+ChoixVente);
+		//Temporaire tant que les fonction simplifiées ne sont pas implementées
+		if (Integer.parseInt(categorieParam)==0) {
+			List<Article> listeArticlesAccueil = new ArticleManager().selectAllEnCours();
+			request.setAttribute("articles", listeArticlesAccueil);
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
+			rd.forward(request, response);
+		} 
+		Integer idUtilisateur = idUser; 
+		System.out.println("utilisateur : "+new UtilisateurManager().retournerUtilisateurParId(idUtilisateur)); 
 		Categorie categorieRecherchee = new CategorieManager().selectById(Integer.parseInt(categorieParam));
 		texteRechercheParam = texteRechercheParam.toLowerCase().trim();
-		System.out.println("texte recherche size :"+ texteRechercheParam.length());
-		List<Article> listeArticlesAcceuil = new ArticleManager().selectByCategorieAndNameAndUtilisateur(categorieRecherchee, texteRechercheParam, idUtilisateur);
-//		List<Article> listeArticlesAcceuil = new ArticleManager().selectAllEnCours();
-		
-		request.setAttribute("articles", listeArticlesAcceuil);
-		
-		//------ creation d'objet pour debug
-//		ArticleDaoJdbcImpl aDao = new ArticleDaoJdbcImpl();
-//		listeArticlesAcceuil = aDao.selectAllEnCours();
-//		
-		
-//		Integer intChiant = 100;
-//		boolean boolChiant = true;
-//		List<Article> listArtChiant = new ArrayList<Article>();
-//		List<Enchere> listEnchChiant = new ArrayList<Enchere>();
-//		Utilisateur u1 = new Utilisateur(intChiant,"yankee" ,"sidy", "barry", "b@eni.fr", "0701020304", "colonel", "35500", "Rennes Sud", "mdp", intChiant, boolChiant, listArtChiant, listEnchChiant);
-//		Categorie c1 = new Categorie(intChiant, "DebugCateg",listArtChiant);
-//		LocalDateTime dateChiant = LocalDateTime.now();
-//		Article a1 = new Article(intChiant, "testServ", "Un bon debug",  dateChiant, dateChiant, intChiant, intChiant, boolChiant, u1, c1);
-//		Article a2 = new Article(intChiant+1, "testServ2", "Un bon debug2",  dateChiant, dateChiant, intChiant, intChiant, boolChiant, u1, c1);
-////----------
-//		listeArticlesAcceuil.add(a1);
-//		listeArticlesAcceuil.add(a2);
-		for (Article art : listeArticlesAcceuil) {
-			System.out.println(art.getNumero());
+		System.out.println("texte recherche size :"+ texteRechercheParam.length()); 
+		List<Article> listeArticlesAccueil = new ArrayList<Article>();
+		if (ChoixAchat) {
+			listeArticlesAccueil= new ArticleManager().selectAchatEncherePlusGagneePlusOuverte(categorieRecherchee, texteRechercheParam, checkEnchereOuverte, checkEnchereUtilisateur, checkEnchereGagnee, idUtilisateur);
+		}
+		if(ChoixVente) {
+			listeArticlesAccueil= new ArticleManager().selectVentePlusNonDebuteePlusTerminee(categorieRecherchee, texteRechercheParam, checkVenteOuverte, checkVenteNonDebutee, checkVenteTerminee, idUtilisateur);
 		}
 		
-		System.out.println("Listes des articles affiché :" + listeArticlesAcceuil.toString());
-		System.out.println("Liste vide :"+ listeArticlesAcceuil.isEmpty());
-		System.out.println("Taille de liste :"+listeArticlesAcceuil.size());
-		//System.out.println(listeArticlesAcceuil.listIterator());
+		request.setAttribute("articles", listeArticlesAccueil);
 		
-		System.out.println("texteRechercheParam : "+texteRechercheParam ); //Debug Parameter recherche
-		System.out.println("categorieParam : "+categorieParam ); // Debug Parameter categorie
-		
-		//--------- DEBUG FIN
-		
-		//---Debug 2
-//		List<Article> listeArticlesSelectAll = new ArticleManager().selectAll();
-//		System.out.println( listeArticlesSelectAll.isEmpty());
-//		System.out.println(listeArticlesSelectAll.size());
-//		System.out.println("Listes des articles affiché SELECT ALL :" + listeArticlesSelectAll.toString());
-//		
-
+ 
+		for (Article art : listeArticlesAccueil) {
+			System.out.println(art.getNumero());
+		}  
+		 
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
 		rd.forward(request, response);
-//		Article a1 = new Article();
-//		Article a2 = new Article();
-//		a2 = listeArticlesSelectAll.get(0);
-//		a1 = listeArticlesSelectAll.get(1);
-//		System.out.println("a1 :"+a1);
-//		System.out.println("a2 :"+a2);
-//		Enchere enchere1 = new EnchereManager().selectByArticleMeilleurOffre(a1);
-//		Enchere enchere2 = new EnchereManager().selectByArticleMeilleurOffre(a2);
-//		
-//		System.out.println("Enchere testant le selectById 1"+enchere1);
-//		System.out.println("Enchere testant le selectById 2"+enchere2);
 	}
 
 }

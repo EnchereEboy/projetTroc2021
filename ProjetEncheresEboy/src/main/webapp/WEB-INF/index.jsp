@@ -7,9 +7,10 @@
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="css/4-col-portfolio.css" rel="stylesheet">
+<script src="vendor/jsThomas.js"></script> 
 </head>
 
-<body class="container">
+<body class="container" onfocus="delay()"   onload = "oncheckedAll()">
 	
 	<a href="<%=response.encodeRedirectURL(request.getContextPath() + "/accueil")%>"><h3>ENI-Enchères</h3></a>
 	<br>
@@ -48,6 +49,44 @@
 					<option value=4>Sport&Loisirs</option>
 				</select>
 			</div>
+		<!-- 		debut partie recherche	 -->	
+		<c:if test="${!empty idUser}">
+				<div>
+				<div class="line">
+					<input type="radio" name="optionConnectee" value="achats"
+						id="achats" onclick="unGreyMeGreyOther(0)" checked> <label>Achats</label>
+					<ul class="liste" id="listeAchat">
+						<li><input type="checkbox" name="enchereOuverte" value="true"
+							id="enchereOuverte" checked> <label>enchères
+								ouvertes</label></li>
+						<li><input type="checkbox" name="enchereUtilisateur"
+							value="true" id="enchereUtilisateur" checked> <label>mes
+								enchères</label></li>
+						<li><input type="checkbox" name="enchereGagnee" value="true"
+							id="enchereGagnee" checked> <label>mes enchères
+								remportées</label></li>
+					</ul>
+				</div>
+				<div class="line" >
+					<input type="radio" name="optionConnectee" value="ventes" id="ventes"
+						onclick="unGreyMeGreyOther(1)" checked> <label>Mes
+						Ventes</label>
+					<ul class="liste" id="listeVente">
+						<li><input type="checkbox" name="ventesOuverte" value="true"
+							id="ventesOuverte" checked> <label>mes ventes en
+								cours</label></li>
+						<li><input type="checkbox" name="venteNonDebutee" value="true"
+							id="venteNonDebutee" checked> <label>ventes non
+								débutées</label></li>
+						<li><input type="checkbox" name="venteTerminee" value="true"
+							id="venteTerminee" checked> <label>ventes
+								teminées</label></li>
+					</ul>
+				</div>
+			</div>
+			</c:if>
+<!-- 		fin partie recherche	 -->
+			
 		</form>
 	</div>
 

@@ -29,9 +29,9 @@ public interface ArticleDao {
 	 	/*
 	 	 * Methode spécifique utile pour l'affichage de l'écran d'acceuil
 	 	 */
-	 	List<Article> selectByCategorieAndNameAndUtilisateur(Categorie cat, String recherche, Integer idUtilisateur);
+	 	List<Article> selectByCategorieAndNameAndUtilisateurEnCours(Categorie cat, String recherche, Integer idUtilisateur);
 
-	 	List<Article> selectByCategorieAndNameAndUtilisateurGagnee(Categorie cat, String recherche, Integer idUtilisateur);
+	 	List<Article> selectByEnchereGagneeAndCategorieAndNameAndUtilisateur(Categorie cat, String recherche, Integer idUtilisateur);
 
 	 	List<Article> selectByCategorieAndNameEnCours(Categorie cat, String recherche);
 
@@ -45,7 +45,34 @@ public interface ArticleDao {
 	 	 * @return
 	 	 */
 	 	Article selectById(Integer idArticle);
+		/**
+		 * Méthode en charge de
+		 * @param cat
+		 * @param recherche
+		 * @param idUtilisateur
+		 * @return List<Article>
+		 */
+		List<Article> selectByEnchereAndCategorieAndNameAndUtilisateur(Categorie cat, String recherche,
+				Integer idUtilisateur);
+		/**
+		 * Méthode en charge de
+		 * @param cat
+		 * @param recherche
+		 * @param idUtilisateur
+		 * @return List<Article>
+		 */
+		List<Article> selectByCategorieAndNameAndUtilisateurNonDebutee(Categorie cat, String recherche,
+				Integer idUtilisateur);
 
+		/**
+		 * Méthode en charge de
+		 * @param cat
+		 * @param recherche
+		 * @param idUtilisateur
+		 * @return List<Article>
+		 */
+		List<Article> selectByCategorieAndNameAndUtilisateurTerminee(Categorie cat, String recherche,
+				Integer idUtilisateur);
 	 	
 	 	
 	  
