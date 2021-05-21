@@ -11,12 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import fr.eni.eboy.bll.UtilisateurManager;
-import fr.eni.eboy.bo.Utilisateur;
+import fr.eni.eboy.bo.Utilisateur; 
 
 /**
  * Servlet implementation class ServletModifierProfil
  */
-@WebServlet("/modifierProfil")
+ 
+@WebServlet(urlPatterns = {"/modifierProfil", "/supprimerProfil"})
 public class ServletModifierProfil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UtilisateurManager modifUtilisateur = new UtilisateurManager();
@@ -26,6 +27,40 @@ public class ServletModifierProfil extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession sessionEncheres = request.getSession();
+		if(request.getServletPath().equals("/supprimerProfil")) {
+			
+			String id =request.getParameter("id"); 
+			Integer idUserToDelete=Integer.parseInt(id);
+			Utilisateur user = (Utilisateur) sessionEncheres.getAttribute("userReturnedSession");
+			String userPwd = user.getMotDePasse();
+			String oldPwd = request.getParameter("motDePasse");
+			UtilisateurManager userDelete = new UtilisateurManager(); 
+			   if (userPwd.equals(oldPwd)) {
+						int retour = userDelete.supprimerUtilisateur(idUserToDelete);
+						
+						if(retour > 0) {
+							request.setAttribute("msgDeconnexion", "Votre compte a été supprimé"); 
+							sessionEncheres.invalidate();
+							 RequestDispatcher rd = request.getRequestDispatcher("/index");
+							 rd.forward(request, response); 
+						} else {
+							//Utilisateur user = (Utilisateur) sessionEncheres.getAttribute("userReturnedSession");
+							request.setAttribute("userUpdate", user);
+							request.setAttribute("msgDeconnexion", "Votre compte ne peut pas être supprimé");
+							RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/modifierProfil.jsp");
+							rd.forward(request, response); 
+						}
+			    }else {
+			    	request.setAttribute("userUpdate", user);
+			    	request.setAttribute("incorrectOldPwd", "Le mot de passe fourni est incorrect");
+					RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/modifierProfil.jsp");
+					rd.forward(request, response);
+			    }
+			
+			 
+	 } 
+		
 		if (request.getParameter("id") == null) {
 			RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/modifierProfil.jsp");
 			rd.forward(request, response);
@@ -48,16 +83,17 @@ public class ServletModifierProfil extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession sessionEncheres = request.getSession();
+
 		try {
 			Utilisateur utilisateur = new Utilisateur();
 			request.setAttribute("utilisateur", utilisateur);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-				
+
 		String pseudo = request.getParameter("pseudo");
 		String nom = request.getParameter("nom");
 		String prenom = request.getParameter("prenom");
@@ -66,12 +102,13 @@ public class ServletModifierProfil extends HttpServlet {
 		String rue = request.getParameter("rue");
 		String codePostal = request.getParameter("codePostal");
 		String ville = request.getParameter("ville");
+		String oldPwd = request.getParameter("motDePasse");
 		String nouveauMotDePasse = request.getParameter("nouveauMotDePasse");
-		String confirmationMotDePasse = request.getParameter("confirmationMotDePasse"); 
-		Integer credit = Integer.parseInt(session.getAttribute("credit").toString());
-		boolean admin = false; 
-		
-		Utilisateur utilisateur = new Utilisateur(); 
+		String confirmationMotDePasse = request.getParameter("confirmationMotDePasse");
+		Integer credit = Integer.parseInt(sessionEncheres.getAttribute("credit").toString());
+		boolean admin = false;
+
+		Utilisateur utilisateur = new Utilisateur();
 		utilisateur.setPseudo(pseudo);
 		utilisateur.setNom(nom);
 		utilisateur.setPrenom(prenom);
@@ -80,23 +117,44 @@ public class ServletModifierProfil extends HttpServlet {
 		utilisateur.setRue(rue);
 		utilisateur.setCodePostal(codePostal);
 		utilisateur.setVille(ville);
-		utilisateur.setMotDePasse(nouveauMotDePasse);
+		if (nouveauMotDePasse.isEmpty()) {
+			utilisateur.setMotDePasse(oldPwd);
+		} else {
+			utilisateur.setMotDePasse(nouveauMotDePasse);
+		}
+
 		utilisateur.setCredit(credit);
 		utilisateur.setAdministrateur(admin);
-		int id =  (Integer) session.getAttribute( "idUserSession" );
+		int id = (Integer) sessionEncheres.getAttribute("idUser");
 		utilisateur.setNumero(id);
-		
-		if(nouveauMotDePasse.equals(confirmationMotDePasse)) {
-			try {
-				modifUtilisateur.modificationUtilisateur(utilisateur);
-				request.setAttribute("utilisateur", utilisateur);
-			} catch (Exception e) {
-				e.printStackTrace();
+
+		Utilisateur user = (Utilisateur) sessionEncheres.getAttribute("userReturnedSession");
+		String userPwd = user.getMotDePasse();
+		if (userPwd.equals(oldPwd)) {
+
+			if (nouveauMotDePasse.equals(confirmationMotDePasse)) {
+				try {
+					modifUtilisateur.modificationUtilisateur(utilisateur);
+					request.setAttribute("utilisateur", utilisateur);
+					RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/monProfil.jsp");
+					rd.forward(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				request.setAttribute("incorrectOldPwd", "Le nouveau pwd doit être identique au champs de confirmation");
+				request.setAttribute("userUpdate", user);
+				RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/modifierProfil.jsp");
+				rd.forward(request, response);
 			}
-			
-			RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/monProfil.jsp");
+
+		} else {
+			request.setAttribute("userUpdate", user);
+			request.setAttribute("incorrectOldPwd", "Le mot de passe fourni est incorrect");
+			RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/WEB-INF/modifierProfil.jsp");
 			rd.forward(request, response);
 		}
+
 	}
 
 }

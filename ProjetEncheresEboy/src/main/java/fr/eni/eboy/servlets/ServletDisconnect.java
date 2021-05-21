@@ -24,9 +24,9 @@ public class ServletDisconnect extends HttpServlet {
 		 
 		
 		 /* Récupération et destruction de la session en cours */
-        HttpSession sessionEnchere = request.getSession();
-        sessionEnchere.invalidate();
-        RequestDispatcher rd = request.getRequestDispatcher("/ServletHome");
+        HttpSession sessionEncheres = request.getSession();
+        sessionEncheres.invalidate();
+        RequestDispatcher rd = request.getRequestDispatcher("/index");
 		rd.forward(request, response);
 	}
 

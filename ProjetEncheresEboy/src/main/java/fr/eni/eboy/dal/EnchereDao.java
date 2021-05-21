@@ -1,6 +1,9 @@
 /**
  * 
  */
+/**
+ * 
+ */
 package fr.eni.eboy.dal;
 
 import java.util.List;
@@ -27,13 +30,17 @@ public interface EnchereDao {
 	public Enchere selectById(Integer idEnchere);
 	
 	public List<Enchere> selectByUtilisateurAcheteur(Utilisateur utilisateur, String recherche);
-	
 	public List<Enchere> selectByUtilisateurAcheteurByCatByName(Categorie cat, Utilisateur utilisateur, String recherche);
 	
 	
+	
 	public List<Enchere> selectByUtilisateurGagne(Utilisateur utilisateur);
+	public List<Enchere> selectByUtilisateurAcheteurGagneByCatByName (Categorie cat, Utilisateur utilisateur, String recherche);
 
 	public Enchere selectByArticleMeilleurOffre (Article article);
-
+	
+	public int enchereTransact (Enchere newEnchere);
+	
+		
 
 }

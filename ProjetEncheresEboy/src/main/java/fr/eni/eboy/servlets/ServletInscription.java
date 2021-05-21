@@ -37,7 +37,7 @@ public class ServletInscription extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession sessionEnchere = request.getSession();
+		HttpSession sessionEncheres = request.getSession();
 		//Récupération des données du formulaire d'inscription
 				String pseudo = "";
 				String nom = "";
@@ -87,15 +87,17 @@ public class ServletInscription extends HttpServlet {
 					
 				}else {
 					//Création de la fiche d'information saisie par l'utlisateur
+					
 					Utilisateur nouveauUtilisateur = new Utilisateur( pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, 100);					
 					//Récupération des infoInscription puis le manager va faire l'insert 
+					System.out.println(nouveauUtilisateur );
 					Utilisateur utilisateurAjout = new UtilisateurManager().insert(nouveauUtilisateur);
 					//on cree une session si elle n'existe pas
 				
 					//On recupere l'identifiant de l'utilisateur
 					Integer idUser=utilisateurAjout.getNumero(); 
 					// On le stock dans une variable de session
-					sessionEnchere.setAttribute("idUser", idUser);
+					sessionEncheres.setAttribute("idUser", idUser);
 					//Modifier pour rediriger vers l'accueil
 					request.removeAttribute("pseudo");
 					request.removeAttribute("nom");
@@ -105,8 +107,9 @@ public class ServletInscription extends HttpServlet {
 					request.removeAttribute("rue");
 					request.removeAttribute("codePostal");
 					request.removeAttribute("ville");
-					RequestDispatcher rd = request.getRequestDispatcher("/index");
-					rd.forward(request, response);
+//					RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
+//					rd.forward(request, response);
+					response.sendRedirect("/ProjetEncheresEboy/encheres");
 				}
  
 				

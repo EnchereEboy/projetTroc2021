@@ -33,6 +33,14 @@ public class Enchere implements Serializable{
 		setUtilisateur(utilisateur);
 	}
 
+	
+	public Enchere( LocalDateTime date, Integer montant, Article article, Utilisateur utilisateur) {
+		this(); 
+		setDate(date);
+		setMontant(montant);
+		setArticle(article);
+		setUtilisateur(utilisateur);
+	}
 
 
 

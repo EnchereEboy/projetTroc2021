@@ -3,7 +3,10 @@
  */
 package fr.eni.eboy.bll;
 
+import java.util.List;
+
 import fr.eni.eboy.bo.Article;
+import fr.eni.eboy.bo.Categorie;
 import fr.eni.eboy.bo.Enchere;
 import fr.eni.eboy.bo.Utilisateur;
 import fr.eni.eboy.dal.DaoFactory;
@@ -32,16 +35,25 @@ public class EnchereManager {
 	public Enchere selectById(int id) {
 		return DaoFactory.getEnchereDao().selectById(id);
 	}
-	public Enchere selectByUtilisateurAcheteur(Utilisateur utilisateur) {
-		return DaoFactory.getEnchereDao().selectByUtilisateurAcheteur(utilisateur);
+	public  List<Enchere> selectByUtilisateurAcheteurByCatByName(Categorie cat, Utilisateur utilisateur, String recherche) {
+		return DaoFactory.getEnchereDao().selectByUtilisateurAcheteurByCatByName( cat,  utilisateur,  recherche);
 	}
-	public Enchere selectByUtilisateurGagne(Utilisateur utilisateur) {
+	public  List<Enchere> selectByUtilisateurGagne(Utilisateur utilisateur) {
 		return DaoFactory.getEnchereDao().selectByUtilisateurGagne(utilisateur);
 	}
 	
 	public Enchere selectByArticleMeilleurOffre(Article article) {
 		return DaoFactory.getEnchereDao().selectByArticleMeilleurOffre(article);
 	}
+	
+	public List<Enchere> selectByUtilisateurAcheteurGagneByCatByName (Categorie cat, Utilisateur utilisateur, String recherche) {
+		return DaoFactory.getEnchereDao().selectByUtilisateurAcheteurGagneByCatByName(cat, utilisateur, recherche);
+	}
+	
+	public int validationEnchere (Enchere newEnchere ) {
+		return DaoFactory.getEnchereDao().enchereTransact(newEnchere);
+	}
+	
 	
 	
 }

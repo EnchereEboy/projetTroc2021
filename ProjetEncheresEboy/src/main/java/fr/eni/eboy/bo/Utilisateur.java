@@ -64,10 +64,9 @@ public class Utilisateur implements Serializable{
 	 * @param motDePasse
 	 * @param credit
 	 */
-	public Utilisateur(String pseudo2, String nom2, String prenom2, String email2, String telephone2, String rue2,
-			String codePostal2, String ville2, String motDePasse2, Integer credit) {
+	public Utilisateur(String pseudo, String nom, String prenom, String email, String telephone, String rue,
+			String codePostal, String ville, String motDePasse, Integer credit) {
 		this();
-		setNumero(numero);
 		setPseudo(pseudo);
 		setNom(nom);
 		setPrenom(prenom);

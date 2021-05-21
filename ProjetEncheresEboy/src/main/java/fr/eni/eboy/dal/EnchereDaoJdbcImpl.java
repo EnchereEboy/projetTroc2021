@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.eni.eboy.bll.UtilisateurManager;
 import fr.eni.eboy.bo.Article;
 import fr.eni.eboy.bo.Categorie;
 import fr.eni.eboy.bo.Enchere;
@@ -59,16 +60,50 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	 * Constante du nom de la colonne de BDD pour la table ARTICLE_VENDUS
 	 */
 	private static final String NUM_CAT_COL = "no_categorie";
+<<<<<<< HEAD
+=======
+	/**
+	 *  Constante du nom de la colonne de BDD pour la table ARTICLE_VENDUS
+	 */
+	private static final String PRIX_VENTE_COL = "prix_vente";
+>>>>>>> branch 'master' of https://github.com/EnchereEboy/projetTroc2021.git
 	private static final String REQ_SELECT_BY_CAT_AND_NAME_AND_ACHETEUR = "SELECT * "
+<<<<<<< HEAD
 			+ "FROM ENCHERES e"
 			+ "JOIN ARTICLES_VENDUS a ON e."+ NUM_COL +"=a."+NUM_COL+" "
+=======
+			+ "FROM ENCHERES e "
+			+ "JOIN ARTICLES_VENDUS a ON e."+ NUM_ARTICLE_COL +"=a."+NUM_ARTICLE_COL+" "
+>>>>>>> branch 'master' of https://github.com/EnchereEboy/projetTroc2021.git
 			+ "WHERE "
+<<<<<<< HEAD
 			+ NUM_UTILISATEUR_COL + "=? "
 			+ "AND " +  +"=0 "
+=======
+			+ "e."+NUM_UTILISATEUR_COL + "=? "
+			+ "AND a." + NUM_CAT_COL +"=? "
+>>>>>>> branch 'master' of https://github.com/EnchereEboy/projetTroc2021.git
 			+ "AND LOWER(a."+ NOM_COL +") LIKE  ?";
 	
-	
-	
+	private static final String REQ_SELECT_BY_CAT_AND_NAME_AND_ACHETEUR_GAGNE = "SELECT * "
+			+ "FROM ENCHERES e "
+			+ "JOIN ARTICLES_VENDUS a ON e."+ NUM_ARTICLE_COL +"=a."+NUM_ARTICLE_COL+" "
+			+ "WHERE "
+			+ "a."+ETAT_VENTE_COL+"=1 "
+			+ "AND e."+MONTANT_COL+"="+PRIX_VENTE_COL+" "
+			+ "AND e."+NUM_UTILISATEUR_COL + "=? "
+			+ "AND a." + NUM_CAT_COL +"=? "
+			+ "AND LOWER(a."+ NOM_COL +") LIKE  ?";
+//REQUETE POUR DEBUG
+//	private static final String REQ_TEST = "SELECT * \r\n"
+//			+ "FROM ENCHERES e\r\n"
+//			+ "JOIN ARTICLES_VENDUS a ON e.no_article=a.no_article\r\n"
+//			+ "WHERE\r\n"
+//			+ "e.no_utilisateur =2\r\n"
+//			+ "AND  a.no_categorie =3 \r\n"
+//			+ "AND LOWER(a.nom_article ) LIKE  '%o%'";
+//	
+	 
 	/**
 	* {@inheritDoc}
 	*/
@@ -76,7 +111,7 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	public Enchere insertNewEnchere(Enchere newEnchere) {
 try (Connection cnx = ConnectionProvider.getConnection()){
 	PreparedStatement pStmt= cnx.prepareStatement(REQ_INSERT_ENCHERE, Statement.RETURN_GENERATED_KEYS);
-	pStmt.setString(1, newEnchere.getDate().format(formatBDDVersJavaLocalDateTime));
+	pStmt.setString(1, newEnchere.getDate().format(formatJourMoisAnneeHeureMinute)); 
 	pStmt.setInt(2, newEnchere.getMontant());
 	pStmt.setInt(3, newEnchere.getArticle().getNumero());
 	pStmt.setInt(4, newEnchere.getUtilisateur().getNumero());
@@ -103,10 +138,12 @@ e.printStackTrace();
 		List<Enchere> listeEnchereUtilisateur = new ArrayList<Enchere>();
 		try (Connection cnx =ConnectionProvider.getConnection()){
 			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_AND_ACHETEUR);
-			pStmt.setInt(1, cat.getNumero());
-			pStmt.setInt(2, utilisateur.getNumero());
+			pStmt.setInt(1, utilisateur.getNumero());
+			pStmt.setInt(2, cat.getNumero());
 			pStmt.setString(3, "%" + recherche.toLowerCase().trim() + "%");
 			ResultSet rs = pStmt.executeQuery();
+//			Statement stmt=cnx.createStatement();
+//			ResultSet rs=stmt.executeQuery(REQ_TEST);
 			while(rs.next()) {
 				listeEnchereUtilisateur.add(map(rs));
 			}
@@ -124,8 +161,30 @@ e.printStackTrace();
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	/**
+	
+	public List<Enchere> selectByUtilisateurAcheteurGagneByCatByName (Categorie cat, Utilisateur utilisateur, String recherche) {
+	
+		List<Enchere> listeEnchereUtilisateur = new ArrayList<Enchere>();
+		try (Connection cnx =ConnectionProvider.getConnection()){
+			PreparedStatement pStmt= cnx.prepareStatement(REQ_SELECT_BY_CAT_AND_NAME_AND_ACHETEUR_GAGNE);
+			pStmt.setInt(1, utilisateur.getNumero());
+			pStmt.setInt(2, cat.getNumero());
+			pStmt.setString(3, "%" + recherche.toLowerCase().trim() + "%");
+			ResultSet rs = pStmt.executeQuery();
+//			Statement stmt=cnx.createStatement();
+//			ResultSet rs=stmt.executeQuery(REQ_TEST);
+			while(rs.next()) {
+				listeEnchereUtilisateur.add(map(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listeEnchereUtilisateur;
+		
+	}
+		
+		
+		/**
 	* {@inheritDoc}
 	*/
 	@Override
@@ -203,8 +262,41 @@ e.printStackTrace();
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
+	@Override
+	public int enchereTransact (Enchere newEnchere ) {
+		//on annule l'auto-commit (par défaut true avec JDBC)
+		
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			 cnx.setAutoCommit(false);
+			 
+			  try { 
+					 
+					 UtilisateurManager utilisateurUpdate=new UtilisateurManager();
+					 UtilisateurManager utilisateurUpdate1=new UtilisateurManager(); 
+					 
+					  utilisateurUpdate.crediter(newEnchere.getArticle().getNumero());
+					  utilisateurUpdate1.debiter(newEnchere.getUtilisateur().getNumero(), newEnchere.getMontant());
+					 insertNewEnchere(newEnchere);
+						
+					  
+					
+					 
+					 cnx.commit(); 
+			  }catch (Exception e) {
+				  cnx.rollback();
+				  e.printStackTrace();
+				// TODO: handle exception
+			}
+			  
+		}catch (Exception e) {
+			 
+			e.printStackTrace();
+		}
+		  
+		
+ 	return 5;
+	}
+	
 	
 
 }

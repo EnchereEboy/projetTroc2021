@@ -11,14 +11,21 @@ package fr.eni.eboy.dal;
 public class DaoFactory {
 	 
 	  
+	/**
+	 * Méthode en charge de
+	 * @return
+	 */
 	public static ArticleDao getArticleDao() {
 		return new ArticleDaoJdbcImpl();
 	}
 	
+	/**
+	 * Méthode en charge de
+	 * @return
+	 */
 	public static UtilisateurDao getUtilisateurDao() {
 		return new UtilisateurDaoJdbcImpl();
 	}
-
 
 	/**
 	 * Méthode en charge de
@@ -28,16 +35,13 @@ public class DaoFactory {
 		return new CategorieDaoJdbcImpl();
 	}
 
-
-
-
 	/**
 	 * Méthode en charge de
 	 * @return
 	 */
 	public static EnchereDao getEnchereDao() {
 		return new EnchereDaoJdbcImpl();
-	}
+	}	
 	
 	
 	

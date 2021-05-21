@@ -20,13 +20,7 @@ import fr.eni.eboy.bo.Utilisateur;
 public class ServletConnexion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * Default constructor. 
-     */
-    public ServletConnexion() {
-        // TODO Auto-generated constructor stub
-    }
-
+  
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -67,11 +61,12 @@ public class ServletConnexion extends HttpServlet {
 			//On recupere l'identifiant de l'utilisateur
 			Integer idUser=userConnected.getNumero();
 			// On le stock dans une variable de session
-			sessionEnchere.setAttribute("idUserSession", idUser);
+			sessionEnchere.setAttribute("idUser", idUser);
 //			sessionEnchere.setAttribute("objetUser", userConnected);
 			request.setAttribute("utilisateurconnecte", userConnected);
-			RequestDispatcher rd = request.getRequestDispatcher("/index");
-			rd.forward(request, response);
+//			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/index.jsp");
+//			rd.forward(request, response); 
+			response.sendRedirect("/ProjetEncheresEboy/encheres");
 		}
 		
 		
